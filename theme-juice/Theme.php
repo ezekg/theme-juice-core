@@ -15,7 +15,7 @@ class Theme {
      *
      * @since 0.1.0
      */
-    private $root;
+    public $root;
 
     /**
      * @var {Array}
@@ -23,7 +23,7 @@ class Theme {
      *
      * @since 0.1.0
      */
-    private $assets;
+    public $assets;
 
     /**
      * Constructor
@@ -80,7 +80,7 @@ class Theme {
      *
      * @since 0.1.0
      */
-    private function on_admin_pages() {
+    public function on_admin_pages() {
         global $pagenow;
         return ( is_admin() || $pagenow == "wp-login.php" ) ? true : false;
     }
@@ -108,7 +108,7 @@ class Theme {
      *
      * @since 0.1.0
      */
-    private function register_asset( $handle, $opts ) {
+    public function register_asset( $handle, $opts ) {
 
         // Make sure asset type was passed
         if ( ! isset( $opts["type"] ) ) {
@@ -178,7 +178,7 @@ class Theme {
      *
      * @since 0.1.0
      */
-    private function render_header() {
+    public function render_header() {
 
         // Empty array
         $buffer = array();
@@ -226,7 +226,7 @@ class Theme {
      *
      * @since 0.1.0
      */
-    private function render_footer() {
+    public function render_footer() {
 
         // Empty array
         $buffer = array();

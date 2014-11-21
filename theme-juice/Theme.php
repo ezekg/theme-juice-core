@@ -201,7 +201,7 @@ class Theme {
 
         // Create OpenGraph tags
         if ( have_posts() ) {
-            the_post();
+            global $post;
 
             $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';
             $buffer[] = '<meta property="og:title" content="' . get_the_title() . '">';

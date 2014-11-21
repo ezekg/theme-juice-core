@@ -205,12 +205,12 @@ class Theme {
         // Create OpenGraph tags
         if ( have_posts() ) {
             $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';
-            $buffer[] = '<meta property="og:title" content="' . get_the_title() . '">';
-            $buffer[] = '<meta property="og:url" content="' . get_the_permalink() . '">';
-            $buffer[] = '<meta property="og:description" content="' . get_the_short_content() . '">';
+            $buffer[] = '<meta property="og:title" content="' . $post->post_title . '">';
+            $buffer[] = '<meta property="og:url" content="' . get_the_permalink( $post->ID ) . '">';
+            $buffer[] = '<meta property="og:description" content="' . $post->post_excerpt . '">';
 
             if ( get_the_post_thumbnail() != "" ) {
-                $image = wp_get_attachment_image_src( get_post_thumbnail_id(), "full" );
+                $image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), "full" );
                 $buffer[] = '<meta property="og:image" content="' . $image[0] . '">';
             }
         }

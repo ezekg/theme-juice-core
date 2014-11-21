@@ -200,11 +200,14 @@ class Theme {
         $buffer[] = '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">';
 
         // Create OpenGraph tags
-        if ( is_single() && have_posts() ) {
+        if ( have_posts() ) {
             $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';
             $buffer[] = '<meta property="og:title" content="' . get_the_title() . '">';
             $buffer[] = '<meta property="og:url" content="' . get_the_permalink() . '">';
             $buffer[] = '<meta property="og:description" content="' . get_the_excerpt() . '">';
+            if ( get_the_post_thumbnail() != "" ) {
+                $buffer[] = '<meta property="og:image" content="' . wp_get_attachment_image_src( get_post_thumbnail_id(), "full" ) . '">';
+            }
         }
 
         // Return current buffer

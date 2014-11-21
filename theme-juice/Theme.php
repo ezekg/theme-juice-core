@@ -214,7 +214,7 @@ class Theme {
             }
         }
 
-        wp_reset_query()
+        wp_reset_query();
 
         // Return current buffer
         echo implode( PHP_EOL, $buffer );

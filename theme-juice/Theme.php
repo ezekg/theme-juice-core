@@ -179,6 +179,7 @@ class Theme {
      * @since 0.1.0
      */
     public function render_head() {
+        global $wp_query, $post;
 
         // Empty array
         $buffer = array();
@@ -201,7 +202,6 @@ class Theme {
 
         // Create OpenGraph tags
         if ( have_posts() ) {
-            global $post;
 
             $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';
             $buffer[] = '<meta property="og:title" content="' . get_the_title() . '">';

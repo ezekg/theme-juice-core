@@ -206,7 +206,7 @@ class Theme {
             $buffer[] = '<meta property="og:url" content="' . get_the_permalink() . '">';
             $buffer[] = '<meta property="og:description" content="' . get_the_excerpt() . '">';
             if ( get_the_post_thumbnail() != "" ) {
-                $image = wp_get_attachment_image_src( get_post_thumbnail_id() );
+                $image = wp_get_attachment_image_src( get_post_thumbnail_id(), "full" );
                 $buffer[] = '<meta property="og:image" content="' . $image[0] . '">';
             }
         }

@@ -63,7 +63,7 @@ class Theme {
 
             // Render header after WP has loaded
             add_action( "wp", function() use ( $self ) {
-                $self->render_header();
+                $self->render_head();
             }, 50);
 
             // Render footer before shutdown
@@ -178,7 +178,7 @@ class Theme {
      *
      * @since 0.1.0
      */
-    public function render_header() {
+    public function render_head() {
 
         // Empty array
         $buffer = array();
@@ -234,7 +234,7 @@ class Theme {
         // Wordpress hook
         wp_footer();
 
-        // render close body and html
+        // Render close body and html
         $buffer[] = '</body>';
         $buffer[] = '</html>';
 

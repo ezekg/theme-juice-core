@@ -50,6 +50,8 @@ class Theme {
         $this->assets = $options["assets"];
 
         if ( ! $this->on_admin_pages() ) {
+
+            // Fix for PHP <= 5.3.x not allowing $this inside of closure
             $self = $this;
 
             // Add assets
@@ -179,6 +181,7 @@ class Theme {
      * @since 0.1.0
      */
     public function render_head() {
+        global $wp_query, $post;
 
         // Empty array
         $buffer = array();
@@ -201,8 +204,6 @@ class Theme {
 
         // Create OpenGraph tags
         if ( have_posts() ) {
-            the_post();
-
             $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';
             $buffer[] = '<meta property="og:title" content="' . get_the_title() . '">';
             $buffer[] = '<meta property="og:url" content="' . get_the_permalink() . '">';
@@ -213,8 +214,6 @@ class Theme {
                 $buffer[] = '<meta property="og:image" content="' . $image[0] . '">';
             }
         }
-
-        wp_reset_query();
 
         // Return current buffer
         echo implode( PHP_EOL, $buffer );

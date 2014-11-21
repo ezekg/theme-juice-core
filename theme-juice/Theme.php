@@ -199,6 +199,14 @@ class Theme {
         $buffer[] = '<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />';
         $buffer[] = '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">';
 
+        // Create OpenGraph tags
+        if ( is_single() && have_posts() ) {
+            $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';
+            $buffer[] = '<meta property="og:title" content="' . get_the_title() . '">';
+            $buffer[] = '<meta property="og:url" content="' . get_the_permalink() . '">';
+            $buffer[] = '<meta property="og:description" content="' . get_the_excerpt() . '">';
+        }
+
         // Return current buffer
         echo implode( PHP_EOL, $buffer );
 

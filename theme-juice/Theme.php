@@ -181,7 +181,6 @@ class Theme {
      * @since 0.1.0
      */
     public function render_head() {
-        global $wp_query, $post;
 
         // Empty array
         $buffer = array();
@@ -204,15 +203,19 @@ class Theme {
 
         // Create OpenGraph tags
         if ( have_posts() ) {
+            the_post();
+
             $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';
-            $buffer[] = '<meta property="og:title" content="' . $post->post_title . '">';
-            $buffer[] = '<meta property="og:url" content="' . get_the_permalink( $post->ID ) . '">';
-            $buffer[] = '<meta property="og:description" content="' . $post->post_excerpt . '">';
+            $buffer[] = '<meta property="og:title" content="' . get_the_title() . '">';
+            $buffer[] = '<meta property="og:url" content="' . get_the_permalink() . '">';
+            $buffer[] = '<meta property="og:description" content="' . get_the_excerpt() . '">';
 
             if ( get_the_post_thumbnail() != "" ) {
-                $image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), "full" );
+                $image = wp_get_attachment_image_src( get_post_thumbnail_id(), "full" );
                 $buffer[] = '<meta property="og:image" content="' . $image[0] . '">';
             }
+            
+            rewind_posts();
         }
 
         // Return current buffer

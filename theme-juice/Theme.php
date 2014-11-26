@@ -196,26 +196,50 @@ class Theme {
         // Favicon
         $buffer[] = '<link rel="shortcut icon" href="' . get_template_directory_uri() . '/favicon.ico" />';
 
+        //
+
         // Meta tags
         $buffer[] = '<meta charset="' . get_bloginfo( 'charset' ) . '">';
         $buffer[] = '<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />';
         $buffer[] = '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">';
 
-        // Create OpenGraph tags
         if ( have_posts() ) {
             the_post();
 
+            // Opengraph
+            $buffer[] = '<meta property="og:type" content="article">';
             $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';
             $buffer[] = '<meta property="og:title" content="' . get_the_title() . '">';
             $buffer[] = '<meta property="og:url" content="' . get_the_permalink() . '">';
             $buffer[] = '<meta property="og:description" content="' . get_the_excerpt() . '">';
 
+            // Twitter card
+            $buffer[] = '<meta name="twitter:card" content="summary">';
+            $buffer[] = '<meta name="twitter:title" content="' . get_the_title() . '">';
+            $buffer[] = '<meta name="twitter:url" content="' . get_the_title() . '">';
+            $buffer[] = '<meta name="twitter:description" content="' . get_the_excerpt() . '">';
+
             if ( get_the_post_thumbnail() != "" ) {
                 $image = wp_get_attachment_image_src( get_post_thumbnail_id(), "full" );
+                // Opengraph
                 $buffer[] = '<meta property="og:image" content="' . $image[0] . '">';
+                // Twitter card
+                $buffer[] = '<meta name="twitter:image" content="' . $image[0] . '">';
             }
-            
+
             rewind_posts();
+        } else {
+
+            // Opengraph
+            $buffer[] = '<meta property="og:type" content="website">';
+            $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';
+            $buffer[] = '<meta property="og:title" content="' . get_the_title() . '">';
+            $buffer[] = '<meta property="og:url" content="' . home_url() . '">';
+
+            // Twitter card
+            $buffer[] = '<meta name="twitter:card" content="summary">';
+            $buffer[] = '<meta name="twitter:title" content="' . get_the_title() . '">';
+            $buffer[] = '<meta name="twitter:url" content="' . home_url() . '">';
         }
 
         // Return current buffer

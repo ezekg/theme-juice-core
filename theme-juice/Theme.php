@@ -204,25 +204,30 @@ class Theme {
         if ( have_posts() ) {
             the_post();
 
-            // Description
-            $buffer[] = '<meta name="description" content="' . get_the_excerpt() . '">';
-
             // Opengraph
             $buffer[] = '<meta property="og:type" content="article">';
             $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';
             $buffer[] = '<meta property="og:title" content="' . get_the_title() . '">';
             $buffer[] = '<meta property="og:url" content="' . get_the_permalink() . '">';
-            $buffer[] = '<meta property="og:description" content="' . get_the_excerpt() . '">';
 
             // Twitter card
             $buffer[] = '<meta name="twitter:card" content="summary">';
             $buffer[] = '<meta name="twitter:title" content="' . get_the_title() . '">';
             $buffer[] = '<meta name="twitter:url" content="' . get_the_title() . '">';
-            $buffer[] = '<meta name="twitter:description" content="' . get_the_excerpt() . '">';
 
             // Google+ schema.org
             $buffer[] = '<meta itemprop="name" content="' . get_the_title() . '">';
-            $buffer[] = '<meta itemprop="description" content="' . get_the_excerpt() . '">';
+
+            if ( get_the_excerpt() != "" ) {
+                // Description
+                $buffer[] = '<meta name="description" content="' . get_the_excerpt() . '">';
+                // Opengraph
+                $buffer[] = '<meta property="og:description" content="' . get_the_excerpt() . '">';
+                // Twitter card
+                $buffer[] = '<meta name="twitter:description" content="' . get_the_excerpt() . '">';
+                // Google+ schema.org
+                $buffer[] = '<meta itemprop="description" content="' . get_the_excerpt() . '">';
+            }
 
             if ( get_the_post_thumbnail() != "" ) {
                 $image = wp_get_attachment_image_src( get_post_thumbnail_id(), "full" );

@@ -252,6 +252,9 @@ class Theme {
             $buffer[] = '<meta name="twitter:card" content="summary">';
             $buffer[] = '<meta name="twitter:title" content="' . get_the_title() . '">';
             $buffer[] = '<meta name="twitter:url" content="' . home_url() . '">';
+
+            // Google+ schema.org
+            $buffer[] = '<meta itemprop="name" content="' . get_the_title() . '">';
         }
 
         // Return current buffer

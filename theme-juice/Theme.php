@@ -204,6 +204,9 @@ class Theme {
         if ( have_posts() ) {
             the_post();
 
+            // Description
+            $buffer[] = '<meta name="description" content="' . get_the_excerpt() . '">';
+
             // Opengraph
             $buffer[] = '<meta property="og:type" content="article">';
             $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';

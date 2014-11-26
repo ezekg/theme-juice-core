@@ -182,7 +182,7 @@ class Theme {
      */
     public function render_head() {
 
-        // Empty array
+        // New buffer
         $buffer = array();
 
         // Doctype
@@ -263,10 +263,7 @@ class Theme {
         // Wordpress hook
         wp_head();
 
-        // Clear buffer
-        $buffer = null;
-
-        // Create new array
+        // Create new buffer
         $buffer = array();
 
         // Close head and open body
@@ -286,7 +283,7 @@ class Theme {
      */
     public function render_footer() {
 
-        // Empty array
+        // New buffer
         $buffer = array();
 
         // Wordpress hook

@@ -213,7 +213,7 @@ class Theme {
             // Twitter card
             $buffer[] = '<meta name="twitter:card" content="summary">';
             $buffer[] = '<meta name="twitter:title" content="' . get_the_title() . '">';
-            $buffer[] = '<meta name="twitter:url" content="' . get_the_title() . '">';
+            $buffer[] = '<meta name="twitter:url" content="' . get_the_permalink() . '">';
 
             // Google+ schema.org
             $buffer[] = '<meta itemprop="name" content="' . get_the_title() . '">';

@@ -63,15 +63,20 @@ class Theme {
                 });
             }
 
+            // Add meta tags to head
+            add_action( "wp_head", function() use ( $self ) {
+                $self->set_meta_tags();
+            }, 500);
+
             // Render header after WP has loaded
             add_action( "wp", function() use ( $self ) {
                 $self->render_head();
-            }, 50);
+            }, 500);
 
             // Render footer before shutdown
             add_action( "shutdown", function() use ( $self ) {
                 $self->render_footer();
-            }, 50);
+            }, 500);
         }
     }
 
@@ -174,27 +179,16 @@ class Theme {
     }
 
     /**
-     * Render HTML doctype and head, wp_head, opening tags
+     * Build out meta tags
      *
      * @return {Void}
      *
      * @since 0.1.0
      */
-    public function render_head() {
+    public function set_meta_tags() {
 
-        // New buffer
+        // Create new buffer
         $buffer = array();
-
-        // Doctype
-        $buffer[] = '<!DOCTYPE html>';
-        $buffer[] = '<html class="no-js">';
-        $buffer[] = '<head>';
-
-        // Title
-        $buffer[] = '<title>' . wp_title( "-", false ) . '</title>';
-
-        // Favicon
-        $buffer[] = '<link rel="shortcut icon" href="' . get_template_directory_uri() . '/favicon.ico" />';
 
         // Meta tags
         $buffer[] = '<meta charset="' . get_bloginfo( 'charset' ) . '">';
@@ -229,7 +223,7 @@ class Theme {
                 $buffer[] = '<meta itemprop="description" content="' . get_the_excerpt() . '">';
             }
 
-            if ( get_the_post_thumbnail() != "" ) {
+            if ( has_post_thumbnail() != "" ) {
                 $image = wp_get_attachment_image_src( get_post_thumbnail_id(), "full" );
                 // Opengraph
                 $buffer[] = '<meta property="og:image" content="' . $image[0] . '">';
@@ -256,6 +250,33 @@ class Theme {
             // Google+ schema.org
             $buffer[] = '<meta itemprop="name" content="' . get_the_title() . '">';
         }
+
+        // Return current buffer
+        return implode( PHP_EOL, $buffer );
+    }
+
+    /**
+     * Render HTML doctype and head, wp_head, opening tags
+     *
+     * @return {Void}
+     *
+     * @since 0.1.0
+     */
+    public function render_head() {
+
+        // New buffer
+        $buffer = array();
+
+        // Doctype
+        $buffer[] = '<!DOCTYPE html>';
+        $buffer[] = '<html class="no-js">';
+        $buffer[] = '<head>';
+
+        // Title
+        $buffer[] = '<title>' . wp_title( "-", false ) . '</title>';
+
+        // Favicon
+        $buffer[] = '<link rel="shortcut icon" href="' . get_template_directory_uri() . '/favicon.ico" />';
 
         // Return current buffer
         echo implode( PHP_EOL, $buffer );

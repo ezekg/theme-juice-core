@@ -212,7 +212,7 @@ class Theme {
             // Google+ schema.org
             $buffer[] = '<meta itemprop="name" content="' . get_the_title() . '">';
 
-            if ( get_the_excerpt() != "" ) {
+            if ( is_single() ) {
                 // Description
                 $buffer[] = '<meta name="description" content="' . get_the_excerpt() . '">';
                 // Opengraph
@@ -252,7 +252,7 @@ class Theme {
         }
 
         // Return current buffer
-        return implode( PHP_EOL, $buffer );
+        echo implode( PHP_EOL, $buffer );
     }
 
     /**

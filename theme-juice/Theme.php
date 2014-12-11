@@ -4,24 +4,18 @@ namespace ThemeJuice;
 
 /**
  * This is used to register assets, and render the doctype, head and body tags.
- *
- * @since 0.1.0
  */
 class Theme {
 
     /**
      * @var {String}
      *   String that contains WP root directory
-     *
-     * @since 0.1.0
      */
     public $root;
 
     /**
      * @var {Array}
      *   Array that contains theme assets
-     *
-     * @since 0.1.0
      */
     public $assets;
 
@@ -30,8 +24,6 @@ class Theme {
      *
      * @param {Array} $options
      *   Array that contains theme settings
-     *
-     * @since 0.1.0
      */
     public function __construct( $options = array() ) {
 
@@ -84,8 +76,6 @@ class Theme {
      * Make sure we're not on admin or login pages
      *
      * @return {Bool}
-     *
-     * @since 0.1.0
      */
     public function on_admin_pages() {
         global $pagenow;
@@ -112,8 +102,6 @@ class Theme {
      *   Version number for asset
      *
      * @return {Void}
-     *
-     * @since 0.1.0
      */
     public function register_asset( $handle, $opts ) {
 
@@ -182,8 +170,6 @@ class Theme {
      * Build out meta tags
      *
      * @return {Void}
-     *
-     * @since 0.1.0
      */
     public function set_meta_tags() {
 
@@ -212,26 +198,31 @@ class Theme {
             // Google+ schema.org
             $buffer[] = '<meta itemprop="name" content="' . get_the_title() . '">';
 
-            if ( is_single() ) {
-                // Description
-                $buffer[] = '<meta name="description" content="' . get_the_excerpt() . '">';
-                // Opengraph
-                $buffer[] = '<meta property="og:description" content="' . get_the_excerpt() . '">';
-                // Twitter card
-                $buffer[] = '<meta name="twitter:description" content="' . get_the_excerpt() . '">';
-                // Google+ schema.org
-                $buffer[] = '<meta itemprop="description" content="' . get_the_excerpt() . '">';
-            }
-
-            if ( has_post_thumbnail() != "" ) {
-                $image = wp_get_attachment_image_src( get_post_thumbnail_id(), "full" );
-                // Opengraph
-                $buffer[] = '<meta property="og:image" content="' . $image[0] . '">';
-                // Twitter card
-                $buffer[] = '<meta name="twitter:image" content="' . $image[0] . '">';
-                // Google+ schema.org
-                $buffer[] = '<meta itemprop="image" content="' . $image[0] . '">';
-            }
+            // if ( is_single() || is_page() ) {
+            //
+            //     // Build the description
+            //     $description = get_the_excerpt();
+            //
+            //     // Description
+            //     $buffer[] = '<meta name="description" content="' . $description . '">';
+            //     // Opengraph
+            //     $buffer[] = '<meta property="og:description" content="' . $description . '">';
+            //     // Twitter card
+            //     $buffer[] = '<meta name="twitter:description" content="' . $description . '">';
+            //     // Google+ schema.org
+            //     $buffer[] = '<meta itemprop="description" content="' . $description . '">';
+            //
+            //     // Get post thumbnail
+            //     if ( has_post_thumbnail() != "" ) {
+            //         $image = wp_get_attachment_image_src( get_post_thumbnail_id(), "full" );
+            //         // Opengraph
+            //         $buffer[] = '<meta property="og:image" content="' . $image[0] . '">';
+            //         // Twitter card
+            //         $buffer[] = '<meta name="twitter:image" content="' . $image[0] . '">';
+            //         // Google+ schema.org
+            //         $buffer[] = '<meta itemprop="image" content="' . $image[0] . '">';
+            //     }
+            // }
 
             rewind_posts();
         } else {
@@ -259,8 +250,6 @@ class Theme {
      * Render HTML doctype and head, wp_head, opening tags
      *
      * @return {Void}
-     *
-     * @since 0.1.0
      */
     public function render_head() {
 
@@ -299,8 +288,6 @@ class Theme {
      * Render wp_footer, close out tags
      *
      * @return {Void}
-     *
-     * @since 0.1.0
      */
     public function render_footer() {
 

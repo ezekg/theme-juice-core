@@ -31,7 +31,8 @@ class Theme {
         if ( ! empty( $options ) ) {
             $options = array_merge( array(
                 "root" => get_template_directory_uri(),
-                "assets" => array()
+                "assets" => array(),
+                "meta" => true,
             ), $options );
         }
 
@@ -42,6 +43,14 @@ class Theme {
         $this->assets = $options["assets"];
 
         if ( ! $this->on_admin_pages() ) {
+
+            /**
+             * Start the buffer, but don't return anything until rendering is complete;
+             *    this is done so that we don't get a 'headers already sent' message when
+             *    a request gets redirected (for example, when a URL doesn't contain a
+             *    trailing slash and is redirected to a URL that does).
+             */
+            ob_start();
 
             // Fix for PHP <= 5.3.x not allowing $this inside of closure
             $self = $this;
@@ -56,19 +65,21 @@ class Theme {
             }
 
             // Add meta tags to head
-            add_action( "wp_head", function() use ( $self ) {
-                $self->set_meta_tags();
-            }, 500);
+            if ( $options["meta"] ) {
+                add_action( "wp_head", function() use ( $self ) {
+                    $self->set_meta_tags();
+                });
+            }
 
             // Render header after WP has loaded
             add_action( "wp", function() use ( $self ) {
                 $self->render_head();
-            }, 500);
+            });
 
             // Render footer before shutdown
             add_action( "shutdown", function() use ( $self ) {
                 $self->render_footer();
-            }, 500);
+            });
         }
     }
 
@@ -114,8 +125,11 @@ class Theme {
         if ( ! isset( $opts["location"] ) ) {
             throw new \Exception( "Attempted to register asset `$handle` without a location. Aborting mission." );
         } else {
-            // Make sure this is not an external asset,
-            //   else redefine location from $root
+
+            /**
+             * Make sure this is not an external asset,
+             *   else redefine location from $root
+             */
             if ( ! isset( $opts["external"] ) === true ) {
                 $opts["location"] = $this->root . "/" . $opts["location"];
             }
@@ -176,11 +190,6 @@ class Theme {
         // Create new buffer
         $buffer = array();
 
-        // Meta tags
-        $buffer[] = '<meta charset="' . get_bloginfo( 'charset' ) . '">';
-        $buffer[] = '<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />';
-        $buffer[] = '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">';
-
         if ( have_posts() ) {
             the_post();
 
@@ -198,31 +207,32 @@ class Theme {
             // Google+ schema.org
             $buffer[] = '<meta itemprop="name" content="' . get_the_title() . '">';
 
-            // if ( is_single() || is_page() ) {
-            //
-            //     // Build the description
-            //     $description = get_the_excerpt();
-            //
-            //     // Description
-            //     $buffer[] = '<meta name="description" content="' . $description . '">';
-            //     // Opengraph
-            //     $buffer[] = '<meta property="og:description" content="' . $description . '">';
-            //     // Twitter card
-            //     $buffer[] = '<meta name="twitter:description" content="' . $description . '">';
-            //     // Google+ schema.org
-            //     $buffer[] = '<meta itemprop="description" content="' . $description . '">';
-            //
-            //     // Get post thumbnail
-            //     if ( has_post_thumbnail() != "" ) {
-            //         $image = wp_get_attachment_image_src( get_post_thumbnail_id(), "full" );
-            //         // Opengraph
-            //         $buffer[] = '<meta property="og:image" content="' . $image[0] . '">';
-            //         // Twitter card
-            //         $buffer[] = '<meta name="twitter:image" content="' . $image[0] . '">';
-            //         // Google+ schema.org
-            //         $buffer[] = '<meta itemprop="image" content="' . $image[0] . '">';
-            //     }
-            // }
+            if ( is_single() || is_page() ) {
+
+                $description = get_the_excerpt();
+
+                // Description
+                $buffer[] = '<meta name="description" content="' . $description . '">';
+                // Opengraph
+                $buffer[] = '<meta property="og:description" content="' . $description . '">';
+                // Twitter card
+                $buffer[] = '<meta name="twitter:description" content="' . $description . '">';
+                // Google+ schema.org
+                $buffer[] = '<meta itemprop="description" content="' . $description . '">';
+
+                // Get post thumbnail
+                if ( has_post_thumbnail() ) {
+
+                    $image = wp_get_attachment_image_src( get_post_thumbnail_id(), "full" );
+
+                    // Opengraph
+                    $buffer[] = '<meta property="og:image" content="' . $image[0] . '">';
+                    // Twitter card
+                    $buffer[] = '<meta name="twitter:image" content="' . $image[0] . '">';
+                    // Google+ schema.org
+                    $buffer[] = '<meta itemprop="image" content="' . $image[0] . '">';
+                }
+            }
 
             rewind_posts();
         } else {
@@ -266,6 +276,11 @@ class Theme {
 
         // Favicon
         $buffer[] = '<link rel="shortcut icon" href="' . get_template_directory_uri() . '/favicon.ico" />';
+
+        // Required meta tags
+        $buffer[] = '<meta charset="' . get_bloginfo( 'charset' ) . '">';
+        $buffer[] = '<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />';
+        $buffer[] = '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">';
 
         // Return current buffer
         echo implode( "", $buffer );

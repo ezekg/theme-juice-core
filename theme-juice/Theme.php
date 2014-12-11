@@ -252,7 +252,7 @@ class Theme {
         }
 
         // Return current buffer
-        echo implode( PHP_EOL, $buffer );
+        echo implode( "", $buffer );
     }
 
     /**
@@ -279,7 +279,7 @@ class Theme {
         $buffer[] = '<link rel="shortcut icon" href="' . get_template_directory_uri() . '/favicon.ico" />';
 
         // Return current buffer
-        echo implode( PHP_EOL, $buffer );
+        echo implode( "", $buffer );
 
         // Wordpress hook
         wp_head();
@@ -292,7 +292,7 @@ class Theme {
         $buffer[] = '<body class="' . implode( " ", get_body_class() ) . '">';
 
         // Return current buffer
-        echo implode( PHP_EOL, $buffer );
+        echo implode( "", $buffer );
     }
 
     /**

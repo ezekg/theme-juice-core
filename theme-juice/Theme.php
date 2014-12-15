@@ -118,7 +118,7 @@ class Theme {
 
         // Make sure asset type was passed
         if ( ! isset( $opts["type"] ) ) {
-            throw new \Exception( "Attempted to register an asset without a type. Aborting mission." );
+            throw new \Exception( "Attempted to register asset '$handle' without a type. Aborting mission." );
         }
 
         // Make sure asset location was passed

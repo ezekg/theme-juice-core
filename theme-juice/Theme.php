@@ -94,7 +94,7 @@ class Theme {
     }
 
     /**
-     * Register asset to theme with `wp_enqueue_scripts()`
+     * Register asset to theme with 'wp_enqueue_scripts()'
      *
      * @param {String} $handle
      *   The name of the script to register
@@ -123,7 +123,7 @@ class Theme {
 
         // Make sure asset location was passed
         if ( ! isset( $opts["location"] ) ) {
-            throw new \Exception( "Attempted to register asset `$handle` without a location. Aborting mission." );
+            throw new \Exception( "Attempted to register asset '$handle' without a location. Aborting mission." );
         } else {
 
             /**
@@ -152,12 +152,10 @@ class Theme {
                 }
 
                 // Enqueue script within closure
-                $enqueue_style = function() use ( $handle, $opts ) {
+                add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
                     wp_enqueue_style( $handle, $opts["location"], $opts["dependencies"], $opts["version"] );
-                };
+                });
 
-                // Add closure to `wp_enqueue_scripts()`
-                add_action( "wp_enqueue_scripts", $enqueue_style );
                 break;
             case "script":
 
@@ -167,15 +165,13 @@ class Theme {
                 }
 
                 // Enqueue script within closure
-                $enqueue_script = function() use ( $handle, $opts ) {
+                add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
                     wp_enqueue_script( $handle, $opts["location"], $opts["dependencies"], $opts["version"] );
-                };
+                });
 
-                // Add closure to `wp_enqueue_scripts()`
-                add_action( "wp_enqueue_scripts", $enqueue_script );
                 break;
             default:
-                throw new \Exception( "Invalid asset type `" . $opts['type'] . "` for `$handle`. Aborting mission." );
+                throw new \Exception( "Invalid asset type '" . $opts['type'] . "' for '$handle'. Aborting mission." );
                 break;
         }
     }

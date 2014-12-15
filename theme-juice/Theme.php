@@ -130,7 +130,7 @@ class Theme {
              * Make sure this is not an external asset,
              *   else redefine location from $root
              */
-            if ( ! isset( $opts["external"] ) === true ) {
+            if ( ! empty( $opts["external"] ) && $opts["external"] ) {
                 $opts["location"] = $this->root . "/" . $opts["location"];
             }
         }

@@ -90,7 +90,7 @@ class Theme {
      */
     public function on_admin_pages() {
         global $pagenow;
-        return ( is_admin() || $pagenow == "wp-login.php" ) ? true : false;
+        return ( is_admin() || $pagenow == "wp-login.php" );
     }
 
     /**
@@ -130,7 +130,7 @@ class Theme {
              * Make sure this is not an external asset,
              *   else redefine location from $root
              */
-            if ( ! isset( $opts["external"] ) && ! $opts["external"] ) {
+            if ( ! isset( $opts["external"] ) || ! $opts["external"] ) {
                 $opts["location"] = $this->root . "/" . $opts["location"];
             }
         }

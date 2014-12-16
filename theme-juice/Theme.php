@@ -268,7 +268,7 @@ class Theme {
         $buffer[] = '<head>';
 
         // Title
-        $buffer[] = '<title>' . wp_title( "", false ) . '</title>';
+        $buffer[] = '<title>' . wp_title( "-", false, "right" ) . '</title>';
 
         // Favicon
         $buffer[] = '<link rel="shortcut icon" href="' . get_template_directory_uri() . '/favicon.ico" />';

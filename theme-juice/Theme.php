@@ -90,7 +90,7 @@ class Theme {
      */
     public function on_admin_pages() {
         global $pagenow;
-        return ( is_admin() || $pagenow == "wp-login.php" );
+        return ( is_admin() || $pagenow === "wp-login.php" );
     }
 
     /**

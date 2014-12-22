@@ -100,8 +100,7 @@ class Theme {
      * @return {Bool}
      */
     public function on_admin_pages() {
-        global $pagenow;
-        return ( is_admin() || $pagenow === "wp-login.php" );
+        return ( is_admin() || $GLOBALS["pagenow"] === "wp-login.php" );
     }
 
     /**

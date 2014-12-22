@@ -5,6 +5,7 @@ namespace ThemeJuice;
 /**
  * Setup and initialize theme
  *
+ * @package Theme Juice Starter Theme
  * @author Ezekiel Gabrielse, Produce Results
  * @link https://produceresults.com
  */

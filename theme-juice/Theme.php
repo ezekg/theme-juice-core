@@ -53,8 +53,8 @@ class Theme {
              *    a request gets redirected (for example, when a URL doesn't contain a
              *    trailing slash and is redirected to a URL that does).
              *
-             * @TODO - This might be able to be done away with if another hook is used,
-             *    for the head, but up to this point I haven't found one that works.
+             * @TODO - This might be able to be done away with if another hook is used for
+             *    building the head, but up to this point I haven't found one that works.
              */
             ob_start();
 

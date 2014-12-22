@@ -3,13 +3,16 @@
 namespace ThemeJuice;
 
 /**
- * This is used to register assets, and render the doctype, head and body tags.
+ * Setup and initialize theme
+ *
+ * @author Ezekiel Gabrielse, Produce Results
+ * @link https://produceresults.com
  */
 class Theme {
 
     /**
      * @var {String}
-     *   String that contains WP root directory
+     *   String that contains theme root directory
      */
     public $root;
 
@@ -45,14 +48,17 @@ class Theme {
         if ( ! $this->on_admin_pages() ) {
 
             /**
-             * Start the buffer, but don't return anything until rendering is complete;
+             * Start the output buffer, but don't return anything until rendering is complete;
              *    this is done so that we don't get a 'headers already sent' message when
              *    a request gets redirected (for example, when a URL doesn't contain a
              *    trailing slash and is redirected to a URL that does).
+             *
+             * @TODO - This might be able to be done away with if another hook is used,
+             *    for the head, but up to this point I haven't found one that works.
              */
             ob_start();
 
-            // Fix for PHP <= 5.3.x not allowing $this inside of closure
+            // Fix for PHP <= 5.3.x not allowing $this inside of closures
             $self = $this;
 
             // Add assets
@@ -71,7 +77,7 @@ class Theme {
                 });
             }
 
-            // Render header after WP has loaded
+            // Render head after WP has loaded
             add_action( "wp", function() use ( $self ) {
                 $self->render_head();
             });
@@ -79,6 +85,11 @@ class Theme {
             // Render footer before shutdown
             add_action( "shutdown", function() use ( $self ) {
                 $self->render_footer();
+            });
+
+            // Output buffers (this is here for the sake of clarity)
+            register_shutdown_function( function() {
+                while ( @ob_end_flush() );
             });
         }
     }

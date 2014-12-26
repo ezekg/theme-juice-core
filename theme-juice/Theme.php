@@ -324,6 +324,6 @@ class Theme {
         $buffer[] = '</html>';
 
         // Return current buffer
-        echo implode( PHP_EOL, $buffer );
+        echo implode( "", $buffer );
     }
 }

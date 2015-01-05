@@ -12,22 +12,19 @@ namespace ThemeJuice;
 class Theme {
 
     /**
-     * @var {String}
-     *   String that contains theme root directory
+     * @var {String} - String that contains theme root directory
      */
     public $root;
 
     /**
-     * @var {Array}
-     *   Array that contains theme assets
+     * @var {Array} - Array that contains theme assets
      */
     public $assets;
 
     /**
      * Constructor
      *
-     * @param {Array} $options
-     *   Array that contains theme settings
+     * @param {Array} $options - Array that contains theme settings
      */
     public function __construct( $options = array() ) {
 
@@ -108,21 +105,15 @@ class Theme {
     /**
      * Register asset to theme with 'wp_enqueue_scripts()'
      *
-     * @param {String} $handle
-     *   The name of the script to register
-     * @param {Array}  $opts
-     *   Array of options for the script
-     *
-     * @param {String} $opts["type"]
-     *   Type of asset to register
-     * @param {Bool}   $opts["external"]
-     *   Use external (off-site) asset
-     * @param {String} $opts["location"]
-     *   Location of asset (relative to $root if not external)
-     * @param {Array}  $opts["dependencies"]
-     *   Assets that this asset depends on (i.e. jquery, etc.)
-     * @param {String} $opts["version"]
-     *   Version number for asset
+     * @param {String} $handle               - The name of the script to register
+     * @param {Array}  $opts                 - Array of options for the script
+     * @param {String} $opts["type"]         - Type of asset to register
+     * @param {Bool}   $opts["external"]     - Use external (off-site) asset
+     * @param {String} $opts["location"]     - Location of asset (relative to $root if not external)
+     * @param {Array}  $opts["dependencies"] - Assets that this asset depends on (i.e. jquery, etc.)
+     * @param {String} $opts["version"]      - Version number for asset
+     * @param {String} $opts["media"]        - Media rule for stylsheets
+     * @param {Bool}   $opts["in_footer"]    - Output script to footer
      *
      * @return {Void}
      */
@@ -275,7 +266,7 @@ class Theme {
     }
 
     /**
-     * Render HTML doctype and head, wp_head, opening tags
+     * Render HTML doctype and head, 'wp_head', opening tags
      *
      * @return {Void}
      */
@@ -316,7 +307,7 @@ class Theme {
     }
 
     /**
-     * Render wp_footer, close out tags
+     * Render 'wp_footer', close out tags
      *
      * @return {Void}
      */

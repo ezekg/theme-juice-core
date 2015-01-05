@@ -46,16 +46,17 @@ class Theme {
         // Assets
         $this->assets = $options["assets"];
 
+        // Lets not load this stuff on admin pages
         if ( ! $this->on_admin_pages() ) {
 
             /**
              * Start the output buffer, but don't return anything until rendering is complete;
-             *    this is done so that we don't get a 'headers already sent' message when
-             *    a request gets redirected (for example, when a URL doesn't contain a
-             *    trailing slash and is redirected to a URL that does).
+             *  this is done so that we don't get a 'headers already sent' message when
+             *  a request gets redirected (for example, when a URL doesn't contain a
+             *  trailing slash and is redirected to a URL that does).
              *
              * @TODO - This might be able to be done away with if another hook is used for
-             *    building the head, but up to this point I haven't found one that works.
+             *  building the head, but up to this point I haven't found one that works.
              */
             ob_start();
 
@@ -146,38 +147,50 @@ class Theme {
             }
         }
 
+        // Set 'dependencies' option if not set
         if ( ! isset( $opts["dependencies"] ) ) {
             $opts["dependencies"] = array();
         }
 
+        // Set 'version' option if not set
         if ( ! isset( $opts["version"] ) ) {
             $opts["version"] = false;
+        }
+
+        // If style, set 'media' option if not set
+        if ( $opts["type"] === "style" && ! isset( $opts["media"] ) ) {
+            $opts["media"] = "all";
+        }
+
+        // If script, set 'in_footer' option if not set
+        if ( $opts["type"] === "script" && ! isset( $opts["in_footer"] ) ) {
+            $opts["in_footer"] = false;
         }
 
         switch ( $opts["type"] ) {
             case "style":
 
-                // Make sure it's not already enqueued
+                // Make sure style is not already enqueued
                 if ( wp_style_is( $handle, "enqueued" ) ) {
-                    return;
+                    throw new \Exception( "Attempted to enqueue stylesheet '$handle', but it is already enqueued. Aborting mission." );
                 }
 
                 // Enqueue script within closure
                 add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
-                    wp_enqueue_style( $handle, $opts["location"], $opts["dependencies"], $opts["version"] );
+                    wp_enqueue_style( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["media"] );
                 });
 
                 break;
             case "script":
 
-                // Make sure it's not already enqueued
+                // Make sure script is not already enqueued
                 if ( wp_script_is( $handle, "enqueued" ) ) {
-                    return;
+                    throw new \Exception( "Attempted to enqueue script '$handle', but it is already enqueued. Aborting mission." );
                 }
 
                 // Enqueue script within closure
                 add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
-                    wp_enqueue_script( $handle, $opts["location"], $opts["dependencies"], $opts["version"] );
+                    wp_enqueue_script( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["in_footer"] );
                 });
 
                 break;
@@ -193,39 +206,37 @@ class Theme {
      * @return {Void}
      */
     public function set_meta_tags() {
-
-        // Create new buffer
         $buffer = array();
 
         if ( have_posts() ) {
             the_post();
 
             // Opengraph
-            $buffer[] = '<meta property="og:type" content="article">';
-            $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';
-            $buffer[] = '<meta property="og:title" content="' . get_the_title() . '">';
-            $buffer[] = '<meta property="og:url" content="' . get_the_permalink() . '">';
+            $buffer[] = "<meta property='og:type' content='article'>";
+            $buffer[] = "<meta property='og:site_name' content='" . get_bloginfo( "name" ) . "'>";
+            $buffer[] = "<meta property='og:title' content='" . get_the_title() . "'>";
+            $buffer[] = "<meta property='og:url' content=" . get_the_permalink() . "'>";
 
             // Twitter card
-            $buffer[] = '<meta name="twitter:card" content="summary">';
-            $buffer[] = '<meta name="twitter:title" content="' . get_the_title() . '">';
-            $buffer[] = '<meta name="twitter:url" content="' . get_the_permalink() . '">';
+            $buffer[] = "<meta name='twitter:card' content='summary'>";
+            $buffer[] = "<meta name='twitter:title' content='" . get_the_title() . "'>";
+            $buffer[] = "<meta name='twitter:url' content='" . get_the_permalink() . "'>";
 
             // Google+ schema.org
-            $buffer[] = '<meta itemprop="name" content="' . get_the_title() . '">';
+            $buffer[] = "<meta itemprop='name' content='" . get_the_title() . "'>";
 
             if ( is_single() || is_page() ) {
 
                 $description = get_the_excerpt();
 
                 // Description
-                $buffer[] = '<meta name="description" content="' . $description . '">';
+                $buffer[] = "<meta name='description' content='" . $description . "'>";
                 // Opengraph
-                $buffer[] = '<meta property="og:description" content="' . $description . '">';
+                $buffer[] = "<meta property='og:description' content='" . $description . "'>";
                 // Twitter card
-                $buffer[] = '<meta name="twitter:description" content="' . $description . '">';
+                $buffer[] = "<meta name='twitter:description' content='" . $description . "'>";
                 // Google+ schema.org
-                $buffer[] = '<meta itemprop="description" content="' . $description . '">';
+                $buffer[] = "<meta itemprop='description' content='" . $description . "'>";
 
                 // Get post thumbnail
                 if ( has_post_thumbnail() ) {
@@ -233,11 +244,11 @@ class Theme {
                     $image = wp_get_attachment_image_src( get_post_thumbnail_id(), "full" );
 
                     // Opengraph
-                    $buffer[] = '<meta property="og:image" content="' . $image[0] . '">';
+                    $buffer[] = "<meta property='og:image' content='" . $image[0] . "'>";
                     // Twitter card
-                    $buffer[] = '<meta name="twitter:image" content="' . $image[0] . '">';
+                    $buffer[] = "<meta name='twitter:image' content='" . $image[0] . "'>";
                     // Google+ schema.org
-                    $buffer[] = '<meta itemprop="image" content="' . $image[0] . '">';
+                    $buffer[] = "<meta itemprop='image' content='" . $image[0] . "'>";
                 }
             }
 
@@ -245,18 +256,18 @@ class Theme {
         } else {
 
             // Opengraph
-            $buffer[] = '<meta property="og:type" content="website">';
-            $buffer[] = '<meta property="og:site_name" content="' . get_bloginfo( "name" ) . '">';
-            $buffer[] = '<meta property="og:title" content="' . get_the_title() . '">';
-            $buffer[] = '<meta property="og:url" content="' . home_url() . '">';
+            $buffer[] = "<meta property='og:type' content='website'>";
+            $buffer[] = "<meta property='og:site_name' content='" . get_bloginfo( "name" ) . "'>";
+            $buffer[] = "<meta property='og:title' content='" . get_the_title() . "'>";
+            $buffer[] = "<meta property='og:url' content='" . home_url() . "'>";
 
             // Twitter card
-            $buffer[] = '<meta name="twitter:card" content="summary">';
-            $buffer[] = '<meta name="twitter:title" content="' . get_the_title() . '">';
-            $buffer[] = '<meta name="twitter:url" content="' . home_url() . '">';
+            $buffer[] = "<meta name='twitter:card' content='summary'>";
+            $buffer[] = "<meta name='twitter:title' content='" . get_the_title() . "'>";
+            $buffer[] = "<meta name='twitter:url' content='" . home_url() . "'>";
 
             // Google+ schema.org
-            $buffer[] = '<meta itemprop="name" content="' . get_the_title() . '">';
+            $buffer[] = "<meta itemprop='name' content='" . get_the_title() . "'>";
         }
 
         // Return current buffer
@@ -269,25 +280,23 @@ class Theme {
      * @return {Void}
      */
     public function render_head() {
-
-        // New buffer
         $buffer = array();
 
         // Doctype
-        $buffer[] = '<!DOCTYPE html>';
-        $buffer[] = '<html class="no-js">';
-        $buffer[] = '<head>';
+        $buffer[] = "<!DOCTYPE html>";
+        $buffer[] = "<html class='no-js'>";
+        $buffer[] = "<head>";
 
         // Title
-        $buffer[] = '<title>' . wp_title( "-", false, "right" ) . '</title>';
+        $buffer[] = "<title>" . wp_title( "-", false, "right" ) . "</title>";
 
         // Favicon
-        $buffer[] = '<link rel="shortcut icon" href="' . get_template_directory_uri() . '/favicon.ico" />';
+        $buffer[] = "<link rel='shortcut icon' href='" . get_template_directory_uri() . "/favicon.ico' />";
 
         // Required meta tags
-        $buffer[] = '<meta charset="' . get_bloginfo( 'charset' ) . '">';
-        $buffer[] = '<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />';
-        $buffer[] = '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">';
+        $buffer[] = "<meta charset='" . get_bloginfo( "charset" ) . "'>";
+        $buffer[] = "<meta http-equiv='X-UA-Compatible' content='IE=edge, chrome=1' />";
+        $buffer[] = "<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>";
 
         // Return current buffer
         echo implode( "", $buffer );
@@ -299,8 +308,8 @@ class Theme {
         $buffer = array();
 
         // Close head and open body
-        $buffer[] = '</head>';
-        $buffer[] = '<body class="' . implode( " ", get_body_class() ) . '">';
+        $buffer[] = "</head>";
+        $buffer[] = "<body class='" . implode( " ", get_body_class() ) . "'>";
 
         // Return current buffer
         echo implode( "", $buffer );
@@ -312,16 +321,14 @@ class Theme {
      * @return {Void}
      */
     public function render_footer() {
-
-        // New buffer
         $buffer = array();
 
         // Wordpress hook
         wp_footer();
 
         // Render close body and html
-        $buffer[] = '</body>';
-        $buffer[] = '</html>';
+        $buffer[] = "</body>";
+        $buffer[] = "</html>";
 
         // Return current buffer
         echo implode( "", $buffer );

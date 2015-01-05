@@ -157,31 +157,31 @@ class Theme {
             $opts["version"] = false;
         }
 
-        // If style, set 'media' option if not set
-        if ( $opts["type"] === "style" && ! isset( $opts["media"] ) ) {
-            $opts["media"] = "all";
-        }
-
-        // If script, set 'in_footer' option if not set
-        if ( $opts["type"] === "script" && ! isset( $opts["in_footer"] ) ) {
-            $opts["in_footer"] = false;
-        }
-
         switch ( $opts["type"] ) {
             case "style":
 
-                // Make sure style is not already enqueued
+                // Set 'media' option if not set
+                if ( ! isset( $opts["media"] ) ) {
+                    $opts["media"] = "all";
+                }
+
+                // Make sure stylesheet is not already enqueued
                 if ( wp_style_is( $handle, "enqueued" ) ) {
                     throw new \Exception( "Attempted to enqueue stylesheet '$handle', but it is already enqueued. Aborting mission." );
                 }
 
-                // Enqueue script within closure
+                // Enqueue stylesheet within closure
                 add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
                     wp_enqueue_style( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["media"] );
                 });
 
                 break;
             case "script":
+
+                // Set 'in_footer' option if not set
+                if ( ! isset( $opts["in_footer"] ) ) {
+                    $opts["in_footer"] = false;
+                }
 
                 // Make sure script is not already enqueued
                 if ( wp_script_is( $handle, "enqueued" ) ) {

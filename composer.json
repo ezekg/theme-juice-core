@@ -5,10 +5,12 @@
     "keywords": ["WordPress", "framework", "theme", "haml", "mthaml", "sass", "coffeescript"],
     "homepage": "https://github.com/theme-juice/theme-juice-core",
     "license": "MIT",
-    "authors": [{
-        "name": "Ezekiel Gabrielse",
-        "email": "ezekiel@produceresults.com"
-    }],
+    "authors": [
+        {
+            "name": "Ezekiel Gabrielse",
+            "email": "ezekiel@produceresults.com"
+        }
+    ],
     "require": {
         "php": ">=5.3.0"
     },

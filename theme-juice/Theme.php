@@ -50,16 +50,14 @@ class Theme {
     public function __construct( $options = array() ) {
 
         // Merge new options with defaults
-        if ( ! empty( $options ) ) {
-            $options = array_merge( array(
-                "root" => get_template_directory_uri(),
-                "meta" => true,
-                "assets" => array(),
-                "functions" => array(),
-                "shortcodes" => array(),
-                "customizer" => array(),
-            ), $options );
-        }
+        $options = array_merge( array(
+            "root" => get_template_directory_uri(),
+            "meta" => true,
+            "assets" => array(),
+            "functions" => array(),
+            "shortcodes" => array(),
+            "customizer" => array(),
+        ), $options );
 
         // Root directory
         $this->root = $options["root"];

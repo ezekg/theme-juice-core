@@ -63,7 +63,7 @@ class Theme {
                 "functions" => array(),
                 "shortcodes" => array(),
                 "customizer" => array(),
-            )
+            ),
         ), $options );
 
         // Root directory
@@ -138,7 +138,6 @@ class Theme {
     public function on_admin_pages() {
         return ( is_admin() || $GLOBALS["pagenow"] === "wp-login.php" );
     }
-
 
     /**
      * Setup included packages if available

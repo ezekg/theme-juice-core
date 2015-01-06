@@ -142,7 +142,7 @@ class Theme {
     /**
      * Setup included packages if available
      *
-     * @param {Array} $options - Array of packages and their settings
+     * @param {Array} $packages - Array of packages and their settings
      *
      * @return {Void}
      */

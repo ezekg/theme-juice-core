@@ -228,8 +228,8 @@ class Theme {
 
                 // Make sure stylesheet is not already enqueued, if it is,
                 //  deregister it to make room for new stylesheet
-                if ( wp_style_is( $handle, "enqueued" ) ) {
-                    wp_deregister_script( $handle );
+                if ( wp_style_is( $handle, "registered" ) ) {
+                    wp_deregister_style( $handle );
                 }
 
                 // Enqueue stylesheet within closure
@@ -247,7 +247,7 @@ class Theme {
 
                 // Make sure script is not already enqueued, if it is,
                 //  deregister it to make room for new script
-                if ( wp_script_is( $handle, "enqueued" ) ) {
+                if ( wp_script_is( $handle, "registered" ) ) {
                     wp_deregister_script( $handle );
                 }
 

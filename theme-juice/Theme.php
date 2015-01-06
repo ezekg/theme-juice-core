@@ -86,7 +86,7 @@ class Theme {
 
             // Add assets
             if ( ! empty( $self->assets ) ) {
-                add_action( "init", function() use ( $self ) {
+                add_action( "init", function() use ( &$self ) {
                     foreach ( $self->assets as $handle => $opts ) {
                         $self->register_asset( $handle, $opts );
                     }
@@ -95,18 +95,18 @@ class Theme {
 
             // Add meta tags to head
             if ( $options["meta"] ) {
-                add_action( "wp_head", function() use ( $self ) {
+                add_action( "wp_head", function() use ( &$self ) {
                     $self->set_meta_tags();
                 });
             }
 
             // Render head after WP has loaded
-            add_action( "wp", function() use ( $self ) {
+            add_action( "wp", function() use ( &$self ) {
                 $self->render_head();
             });
 
             // Render footer before shutdown
-            add_action( "shutdown", function() use ( $self ) {
+            add_action( "shutdown", function() use ( &$self ) {
                 $self->render_footer();
             });
 

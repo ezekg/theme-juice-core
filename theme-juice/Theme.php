@@ -235,7 +235,7 @@ class Theme {
                 // Enqueue stylesheet within closure
                 add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
                     wp_enqueue_style( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["media"] );
-                });
+                }, 50 );
 
                 break;
             case "script":
@@ -254,7 +254,7 @@ class Theme {
                 // Enqueue script within closure
                 add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
                     wp_enqueue_script( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["in_footer"] );
-                });
+                }, 50 );
 
                 break;
             default:

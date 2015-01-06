@@ -118,11 +118,13 @@ class Theme {
         if ( class_exists( "\\ThemeJuice\\Functions" ) ) {
 
             // If functions array was passed, then pass in options to constructor
-            if ( ! empty( $options["functions"] ) ) {
-                $this->functions = new \ThemeJuice\Functions( $options["functions"] );
-            } else {
-                $this->functions = new \ThemeJuice\Functions();
-            }
+            $this->shortcodes = new \ThemeJuice\Functions( function() use ( $options ) {
+                if ( ! empty( $options["functions"] ) ) {
+                    return $options["functions"];
+                } else {
+                    return array();
+                }
+            });
         } else {
             // @TODO - Show a dialog box in WP backend that links to all of the add-ons
             //  for Theme Juice, such as functions, shortcodes and the customizer.
@@ -132,22 +134,26 @@ class Theme {
         if ( class_exists( "\\ThemeJuice\\Shortcodes" ) ) {
 
             // If shortcodes array was passed, then pass in options to constructor
-            if ( ! empty( $options["shortcodes"] ) ) {
-                $this->shortcodes = new \ThemeJuice\Shortcodes( $options["shortcodes"] );
-            } else {
-                $this->shortcodes = new \ThemeJuice\Shortcodes();
-            }
+            $this->shortcodes = new \ThemeJuice\Shortcodes( function() use ( $options ) {
+                if ( ! empty( $options["shortcodes"] ) ) {
+                    return $options["shortcodes"];
+                } else {
+                    return array();
+                }
+            });
         }
 
         // Setup theme customizer
         if ( class_exists( "\\ThemeJuice\\Customizer" ) ) {
 
             // If customizer array was passed, then pass in options to constructor
-            if ( ! empty( $options["customizer"] ) ) {
-                $this->customizer = new \ThemeJuice\Customizer( $options["customizer"] );
-            } else {
-                $this->customizer = new \ThemeJuice\Customizer();
-            }
+            $this->customizer = new \ThemeJuice\Customizer( function() use ( $options ) {
+                if ( ! empty( $options["customizer"] ) ) {
+                    return $options["customizer"];
+                } else {
+                    return array();
+                }
+            });
         }
     }
 

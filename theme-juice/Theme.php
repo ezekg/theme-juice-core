@@ -6,8 +6,11 @@ namespace ThemeJuice;
  * Setup and initialize theme
  *
  * @package Theme Juice Starter
+ * @subpackage Theme Juice Core
  * @author Ezekiel Gabrielse, Produce Results
  * @link https://produceresults.com
+ * @copyright Produce Results (c) 2014
+ * @since 1.0.0
  */
 class Theme {
 
@@ -22,6 +25,24 @@ class Theme {
     public $assets;
 
     /**
+     * @var {Object} - Instance of \ThemeJuice\Functions,
+     *  used to register theme functions.
+     */
+    public $functions;
+
+    /**
+     * @var {Object} - Instance of \ThemeJuice\Shortcodes,
+     *  used to register theme shortcodes.
+     */
+    public $shortcodes;
+
+    /**
+     * @var {Object} - Instance of \ThemeJuice\Customizer,
+     *  used to setup the theme customizer.
+     */
+    public $customizer;
+
+    /**
      * Constructor
      *
      * @param {Array} $options - Array that contains theme settings
@@ -32,8 +53,11 @@ class Theme {
         if ( ! empty( $options ) ) {
             $options = array_merge( array(
                 "root" => get_template_directory_uri(),
-                "assets" => array(),
                 "meta" => true,
+                "assets" => array(),
+                "functions" => array(),
+                "shortcodes" => array(),
+                "customizer" => array(),
             ), $options );
         }
 
@@ -90,6 +114,42 @@ class Theme {
             register_shutdown_function( function() {
                 while ( @ob_end_flush() );
             });
+        }
+
+        // Import functions
+        if ( class_exists( "\\ThemeJuice\\Functions" ) ) {
+
+            // If functions array was passed, then pass in options to constructor
+            if ( ! empty( $options["functions"] ) ) {
+                $this->functions = new \ThemeJuice\Functions( $options["functions"] );
+            } else {
+                $this->functions = new \ThemeJuice\Functions();
+            }
+        } else {
+            // @TODO - Show a dialog box in WP backend that links to all of the add-ons
+            //  for Theme Juice, such as functions, shortcodes and the customizer.
+        }
+
+        // Register shortcodes
+        if ( class_exists( "\\ThemeJuice\\Shortcodes" ) ) {
+
+            // If shortcodes array was passed, then pass in options to constructor
+            if ( ! empty( $options["shortcodes"] ) ) {
+                $this->shortcodes = new \ThemeJuice\Shortcodes( $options["shortcodes"] );
+            } else {
+                $this->shortcodes = new \ThemeJuice\Shortcodes();
+            }
+        }
+
+        // Setup theme customizer
+        if ( class_exists( "\\ThemeJuice\\Customizer" ) ) {
+
+            // If customizer array was passed, then pass in options to constructor
+            if ( ! empty( $options["customizer"] ) ) {
+                $this->customizer = new \ThemeJuice\Customizer( $options["customizer"] );
+            } else {
+                $this->customizer = new \ThemeJuice\Customizer();
+            }
         }
     }
 

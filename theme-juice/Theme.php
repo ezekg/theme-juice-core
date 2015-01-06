@@ -25,19 +25,24 @@ class Theme {
     public $assets;
 
     /**
-     * @var {Object} - Instance of \ThemeJuice\Functions,
+     * @var {Array} - Array that contains packages to include
+     */
+    public $packages;
+
+    /**
+     * @var {Object} - Instance of package \ThemeJuice\Functions,
      *  used to register theme functions.
      */
     public $functions;
 
     /**
-     * @var {Object} - Instance of \ThemeJuice\Shortcodes,
+     * @var {Object} - Instance of package \ThemeJuice\Shortcodes,
      *  used to register theme shortcodes.
      */
     public $shortcodes;
 
     /**
-     * @var {Object} - Instance of \ThemeJuice\Customizer,
+     * @var {Object} - Instance of package \ThemeJuice\Customizer,
      *  used to setup the theme customizer.
      */
     public $customizer;
@@ -54,9 +59,11 @@ class Theme {
             "root" => get_template_directory_uri(),
             "meta" => true,
             "assets" => array(),
-            "functions" => array(),
-            "shortcodes" => array(),
-            "customizer" => array(),
+            "packages" => array(
+                "functions" => array(),
+                "shortcodes" => array(),
+                "customizer" => array(),
+            )
         ), $options );
 
         // Root directory
@@ -64,6 +71,9 @@ class Theme {
 
         // Assets
         $this->assets = $options["assets"];
+
+        // Packages
+        $this->packages = $options["packages"];
 
         // Lets not load this stuff on admin pages
         if ( ! $this->on_admin_pages() ) {
@@ -114,46 +124,9 @@ class Theme {
             });
         }
 
-        // Import functions
-        if ( class_exists( "\\ThemeJuice\\Functions" ) ) {
-
-            // If functions array was passed, then pass in options to constructor
-            $this->shortcodes = new \ThemeJuice\Functions( function() use ( $options ) {
-                if ( ! empty( $options["functions"] ) ) {
-                    return $options["functions"];
-                } else {
-                    return array();
-                }
-            });
-        } else {
-            // @TODO - Show a dialog box in WP backend that links to all of the add-ons
-            //  for Theme Juice, such as functions, shortcodes and the customizer.
-        }
-
-        // Register shortcodes
-        if ( class_exists( "\\ThemeJuice\\Shortcodes" ) ) {
-
-            // If shortcodes array was passed, then pass in options to constructor
-            $this->shortcodes = new \ThemeJuice\Shortcodes( function() use ( $options ) {
-                if ( ! empty( $options["shortcodes"] ) ) {
-                    return $options["shortcodes"];
-                } else {
-                    return array();
-                }
-            });
-        }
-
-        // Setup theme customizer
-        if ( class_exists( "\\ThemeJuice\\Customizer" ) ) {
-
-            // If customizer array was passed, then pass in options to constructor
-            $this->customizer = new \ThemeJuice\Customizer( function() use ( $options ) {
-                if ( ! empty( $options["customizer"] ) ) {
-                    return $options["customizer"];
-                } else {
-                    return array();
-                }
-            });
+        // Loop through and setup packages
+        if ( $this->packages !== false ) {
+            $this->setup_packages( $this->packages );
         }
     }
 
@@ -164,6 +137,40 @@ class Theme {
      */
     public function on_admin_pages() {
         return ( is_admin() || $GLOBALS["pagenow"] === "wp-login.php" );
+    }
+
+
+    /**
+     * Setup included packages if available
+     *
+     * @param {Array} $options - Array of packages and their settings
+     *
+     * @return {Void}
+     */
+    public function setup_packages( $packages ) {
+
+        // Import packages if available
+        foreach ( array_keys( $packages ) as $package ) {
+
+            // Create class name
+            $class_name = ucfirst( $package );
+
+            // Import functions
+            if ( class_exists( $PackageClass = "\\ThemeJuice\\$class_name" ) ) {
+
+                // If functions array was passed, then pass in options to constructor
+                $this->$package = new $PackageClass( function() use ( $packages, $package ) {
+                    if ( ! empty( $packages[$package] ) ) {
+                        return $packages[$package];
+                    } else {
+                        return array();
+                    }
+                });
+            } else {
+                // @TODO - Show a dialog box in WP backend that links to all of the add-ons
+                //  for Theme Juice, such as functions, shortcodes and the customizer.
+            }
+        }
     }
 
     /**

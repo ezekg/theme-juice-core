@@ -69,31 +69,31 @@ class Theme {
         // Root directory
         $this->root = $options["root"];
 
-        // Assets
+        // Assets to register
         $this->assets = $options["assets"];
 
-        // Packages
+        // Packages to include
         $this->packages = $options["packages"];
+
+        // Fix for PHP <= 5.3.x not allowing $this inside of closures
+        $self = $this;
+
+        /**
+         * Start the output buffer, but don't return anything until rendering is complete;
+         *  this is done so that we don't get a 'headers already sent' message when
+         *  a request gets redirected (for example, when a URL doesn't contain a
+         *  trailing slash and is redirected to a URL that does).
+         *
+         * @TODO - This might be able to be done away with if another hook is used for
+         *  building the head, but up to this point I haven't found one that works.
+         */
+        ob_start();
 
         // Lets not load this stuff on admin pages
         if ( ! $this->on_admin_pages() ) {
 
-            /**
-             * Start the output buffer, but don't return anything until rendering is complete;
-             *  this is done so that we don't get a 'headers already sent' message when
-             *  a request gets redirected (for example, when a URL doesn't contain a
-             *  trailing slash and is redirected to a URL that does).
-             *
-             * @TODO - This might be able to be done away with if another hook is used for
-             *  building the head, but up to this point I haven't found one that works.
-             */
-            ob_start();
-
-            // Fix for PHP <= 5.3.x not allowing $this inside of closures
-            $self = $this;
-
             // Add assets
-            if ( ! empty( $self->assets ) ) {
+            if ( ! empty( $this->assets ) ) {
                 add_action( "init", function() use ( &$self ) {
                     foreach ( $self->assets as $handle => $opts ) {
                         $self->register_asset( $handle, $opts );
@@ -126,7 +126,11 @@ class Theme {
 
         // Loop through and setup packages
         if ( $this->packages !== false ) {
-            $this->setup_packages( $this->packages );
+
+            // Filter out disabled packages
+            $this->setup_packages( array_filter( $this->packages, function( $package ) {
+                return $package !== false;
+            }));
         }
     }
 
@@ -149,7 +153,7 @@ class Theme {
     public function setup_packages( $packages ) {
 
         // Import packages if available, discard disabled packages
-        foreach ( array_keys( array_filter( $packages ) ) as $package ) {
+        foreach ( array_keys( $packages ) as $package ) {
 
             // Create class name
             $class_name = ucfirst( $package );

@@ -148,8 +148,8 @@ class Theme {
      */
     public function setup_packages( $packages ) {
 
-        // Import packages if available
-        foreach ( array_keys( $packages ) as $package ) {
+        // Import packages if available, discard disabled packages
+        foreach ( array_keys( array_filter( $packages ) ) as $package ) {
 
             // Create class name
             $class_name = ucfirst( $package );

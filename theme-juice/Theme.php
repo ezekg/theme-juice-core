@@ -158,7 +158,7 @@ class Theme {
             if ( class_exists( $PackageClass = "\\ThemeJuice\\$class_name" ) ) {
 
                 // If functions array was passed, then pass in options to constructor
-                $this->$package = new $PackageClass( function() use ( $packages, $package ) {
+                $this->{$package} = new $PackageClass( function() use ( $packages, $package ) {
                     if ( ! empty( $packages[$package] ) ) {
                         return $packages[$package];
                     } else {

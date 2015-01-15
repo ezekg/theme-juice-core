@@ -78,17 +78,6 @@ class Theme {
         // Fix for PHP <= 5.3.x not allowing $this inside of closures
         $self = $this;
 
-        /**
-         * Start the output buffer, but don't return anything until rendering is complete;
-         *  this is done so that we don't get a 'headers already sent' message when
-         *  a request gets redirected (for example, when a URL doesn't contain a
-         *  trailing slash and is redirected to a URL that does).
-         *
-         * @TODO - This might be able to be done away with if another hook is used for
-         *  building the head, but up to this point I haven't found one that works.
-         */
-        ob_start();
-
         // Lets not load this stuff on admin pages
         if ( ! $this->on_admin_pages() ) {
 
@@ -107,29 +96,6 @@ class Theme {
                     $self->set_meta_tags();
                 });
             }
-
-            // /**
-            //  * Render head immediately after the global WP class object is set up
-            //  *
-            //  * @link http://codex.wordpress.org/Plugin_API/Action_Reference/wp
-            //  */
-            // add_action( "wp", function() use ( &$self ) {
-            //     $self->render_head();
-            // });
-            //
-            // /**
-            //  * Render footer before rendering shutdown
-            //  *
-            //  * @link http://codex.wordpress.org/Plugin_API/Action_Reference/shutdown
-            //  */
-            // add_action( "shutdown", function() use ( &$self ) {
-            //     $self->render_footer();
-            // });
-
-            // Output buffers (this is here for the sake of clarity)
-            register_shutdown_function( function() {
-                while ( @ob_end_flush() );
-            });
         }
 
         // Loop through and setup packages

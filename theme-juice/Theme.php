@@ -108,23 +108,23 @@ class Theme {
                 });
             }
 
-            /**
-             * Render head immediately after the global WP class object is set up
-             *
-             * @link http://codex.wordpress.org/Plugin_API/Action_Reference/wp
-             */
-            add_action( "wp", function() use ( &$self ) {
-                $self->render_head();
-            });
-
-            /**
-             * Render footer before rendering shutdown
-             *
-             * @link http://codex.wordpress.org/Plugin_API/Action_Reference/shutdown
-             */
-            add_action( "shutdown", function() use ( &$self ) {
-                $self->render_footer();
-            });
+            // /**
+            //  * Render head immediately after the global WP class object is set up
+            //  *
+            //  * @link http://codex.wordpress.org/Plugin_API/Action_Reference/wp
+            //  */
+            // add_action( "wp", function() use ( &$self ) {
+            //     $self->render_head();
+            // });
+            //
+            // /**
+            //  * Render footer before rendering shutdown
+            //  *
+            //  * @link http://codex.wordpress.org/Plugin_API/Action_Reference/shutdown
+            //  */
+            // add_action( "shutdown", function() use ( &$self ) {
+            //     $self->render_footer();
+            // });
 
             // Output buffers (this is here for the sake of clarity)
             register_shutdown_function( function() {

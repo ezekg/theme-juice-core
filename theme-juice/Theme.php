@@ -115,16 +115,16 @@ class Theme {
              */
             add_action( "wp", function() use ( &$self ) {
                 $self->render_head();
-            }, 5 );
+            });
 
             /**
-             * Render footer after WordPress is fully loaded
+             * Render footer before rendering shutdown
              *
-             * @link http://codex.wordpress.org/Plugin_API/Action_Reference/wp_loaded
+             * @link http://codex.wordpress.org/Plugin_API/Action_Reference/shutdown
              */
-            add_action( "after_wp", function() use ( &$self ) {
+            add_action( "shutdown", function() use ( &$self ) {
                 $self->render_footer();
-            }, 50 );
+            });
 
             // Output buffers (this is here for the sake of clarity)
             register_shutdown_function( function() {

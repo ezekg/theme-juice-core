@@ -16,8 +16,7 @@
     },
     "suggest": {
         "theme-juice/theme-juice-functions": "Include an array of commonly used helper functions.",
-        "theme-juice/theme-juice-shortcodes": "Include an array of commonly used shortcodes.",
-        "theme-juice/theme-juice-customizer": "Enables an array of useful options within the WordPress Theme Customizer."
+        "theme-juice/theme-juice-shortcodes": "Include an array of commonly used shortcodes."
     },
     "autoload": {
         "psr-4": {

@@ -57,7 +57,6 @@ class Theme {
         // Merge new options with defaults
         $options = array_merge( array(
             "root" => get_template_directory_uri(),
-            "meta" => true,
             "assets" => array(),
             "packages" => array(
                 "functions" => array(),
@@ -87,13 +86,6 @@ class Theme {
                     foreach ( $self->assets as $handle => $opts ) {
                         $self->register_asset( $handle, $opts );
                     }
-                });
-            }
-
-            // Add meta tags to head
-            if ( $options["meta"] ) {
-                add_action( "wp_head", function() use ( &$self ) {
-                    $self->set_meta_tags();
                 });
             }
         }
@@ -242,80 +234,6 @@ class Theme {
     }
 
     /**
-     * Build out meta tags
-     *
-     * @return {Void}
-     */
-    public function set_meta_tags() {
-        $buffer = array();
-
-        if ( have_posts() ) {
-            the_post();
-
-            // Opengraph
-            $buffer[] = "<meta property='og:type' content='article'>";
-            $buffer[] = "<meta property='og:site_name' content='" . get_bloginfo( "name" ) . "'>";
-            $buffer[] = "<meta property='og:title' content='" . get_the_title() . "'>";
-            $buffer[] = "<meta property='og:url' content=" . get_the_permalink() . "'>";
-
-            // Twitter card
-            $buffer[] = "<meta name='twitter:card' content='summary'>";
-            $buffer[] = "<meta name='twitter:title' content='" . get_the_title() . "'>";
-            $buffer[] = "<meta name='twitter:url' content='" . get_the_permalink() . "'>";
-
-            // Google+ schema.org
-            $buffer[] = "<meta itemprop='name' content='" . get_the_title() . "'>";
-
-            if ( is_single() || is_page() ) {
-
-                $description = get_the_excerpt();
-
-                // Description
-                $buffer[] = "<meta name='description' content='" . $description . "'>";
-                // Opengraph
-                $buffer[] = "<meta property='og:description' content='" . $description . "'>";
-                // Twitter card
-                $buffer[] = "<meta name='twitter:description' content='" . $description . "'>";
-                // Google+ schema.org
-                $buffer[] = "<meta itemprop='description' content='" . $description . "'>";
-
-                // Get post thumbnail
-                if ( has_post_thumbnail() ) {
-
-                    $image = wp_get_attachment_image_src( get_post_thumbnail_id(), "full" );
-
-                    // Opengraph
-                    $buffer[] = "<meta property='og:image' content='" . $image[0] . "'>";
-                    // Twitter card
-                    $buffer[] = "<meta name='twitter:image' content='" . $image[0] . "'>";
-                    // Google+ schema.org
-                    $buffer[] = "<meta itemprop='image' content='" . $image[0] . "'>";
-                }
-            }
-
-            rewind_posts();
-        } else {
-
-            // Opengraph
-            $buffer[] = "<meta property='og:type' content='website'>";
-            $buffer[] = "<meta property='og:site_name' content='" . get_bloginfo( "name" ) . "'>";
-            $buffer[] = "<meta property='og:title' content='" . get_the_title() . "'>";
-            $buffer[] = "<meta property='og:url' content='" . home_url() . "'>";
-
-            // Twitter card
-            $buffer[] = "<meta name='twitter:card' content='summary'>";
-            $buffer[] = "<meta name='twitter:title' content='" . get_the_title() . "'>";
-            $buffer[] = "<meta name='twitter:url' content='" . home_url() . "'>";
-
-            // Google+ schema.org
-            $buffer[] = "<meta itemprop='name' content='" . get_the_title() . "'>";
-        }
-
-        // Return current buffer
-        echo implode( "", $buffer );
-    }
-
-    /**
      * Render HTML doctype and head, 'wp_head', opening tags
      *
      * @return {Void}
@@ -327,9 +245,6 @@ class Theme {
         $buffer[] = "<!DOCTYPE html>";
         $buffer[] = "<html class='no-js'>";
         $buffer[] = "<head>";
-
-        // Title
-        $buffer[] = "<title>" . wp_title( "-", false, "right" ) . "</title>";
 
         // Favicon
         $buffer[] = "<link rel='shortcut icon' href='" . get_template_directory_uri() . "/favicon.ico' />";

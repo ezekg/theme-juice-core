@@ -10,14 +10,16 @@ class PackageFactory {
    * @param {String} $package
    * @param {Array}  $options
    *
-   * @return {Void}
+   * @return {Package|Null}
    */
   public static function setup_package( $package, $options ) {
     $class_name = self::format_package_to_class_name( $package );
 
     if ( class_exists( $package_class = "\\ThemeJuice\\Packages\\$class_name" ) ) {
-      new $package_class( $options );
+      return new $package_class( $options );
     }
+    
+    return null;
   }
 
   /**

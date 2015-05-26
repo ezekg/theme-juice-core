@@ -1,6 +1,7 @@
 <?php
 
 namespace ThemeJuice\Loaders;
+use \ThemeJuice\Factories\PackageFactory as PackageFactory;
 
 class PackageLoader implements LoaderInterface {
 
@@ -28,7 +29,7 @@ class PackageLoader implements LoaderInterface {
    */
   private static function setup_packages( $packages ) {
     foreach ( array_keys( $packages ) as $package ) {
-      Factories\PackageFactory::setup_package( $package );
+      PackageFactory::setup_package( $package );
     }
   }
 }

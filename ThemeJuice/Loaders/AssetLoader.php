@@ -14,7 +14,7 @@ class AssetLoader {
    */
   public static function load_assets( $assets ) {
 
-    // @TODO Fix for PHP <= 5.3.x not allowing $this inside of closures
+    // @TODO Fix for PHP <= 5.3.x not allowing self/$this inside of closures
     $self = __CLASS__;
 
     if ( ! self::on_admin_pages() && ! empty( $assets ) ) {

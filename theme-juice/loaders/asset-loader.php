@@ -5,22 +5,13 @@ namespace ThemeJuice\Loaders;
 class AssetLoader {
 
   /**
-   * Constructor
-   *
-   * @param {Array} $assets
-   */
-  public function __construct( $assets = array() ) {
-    $this->load_assets( $assets );
-  }
-
-  /**
    * Add each assets registration method to init action
    *
    * @param {Array} $assets
    *
    * @return {Void}
    */
-  private function load_assets( $assets ) {
+  public static function load_assets( $assets ) {
 
     // @TODO Fix for PHP <= 5.3.x not allowing $this inside of closures
     $self = $this;
@@ -40,7 +31,7 @@ class AssetLoader {
    * @param {String} $handle               - The name of the script to register
    * @param {Array}  $opts                 - Array of options for the script
    * @param {String} $opts["type"]         - Type of asset to register
-   * @param {Bool}   $opts["external"]     - Use external (off-site) asset
+   * @param {Bool}   $opts["external"]     - Use external (off-site) asset, i.e. CDN
    * @param {String} $opts["location"]     - Location of asset (relative to theme dir if not external)
    * @param {Array}  $opts["dependencies"] - Assets that this asset depends on (i.e. jquery, etc.)
    * @param {String} $opts["version"]      - Version number for asset
@@ -73,36 +64,59 @@ class AssetLoader {
 
     switch ( $opts["type"] ) {
       case "style":
-
-        if ( ! isset( $opts["media"] ) ) {
-          $opts["media"] = "all";
-        }
-
-        if ( wp_style_is( $handle, "registered" ) ) {
-          wp_deregister_style( $handle );
-        }
-
-        add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
-          wp_enqueue_style( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["media"] );
-        }, 50 );
-
+        $this->register_style( $handle, $opts );
         break;
       case "script":
-
-        if ( ! isset( $opts["in_footer"] ) ) {
-          $opts["in_footer"] = false;
-        }
-
-        if ( wp_script_is( $handle, "registered" ) ) {
-          wp_deregister_script( $handle );
-        }
-
-        add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
-          wp_enqueue_script( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["in_footer"] );
-        }, 50 );
-
+        $this->register_script( $handle, $opts );
+        break;
+      default:
+        throw new \Exception( "Invalid asset type '{$opts['type']}' for '{$handle}'. Aborting mission." );
         break;
     }
+  }
+
+  /**
+   * Register and enqueue stylesheet
+   *
+   * @param {String} $handle
+   * @param {Array}  $opts
+   *
+   * @return {Void}
+   */
+  private function register_style( $handle, $opts ) {
+    if ( ! isset( $opts["media"] ) ) {
+      $opts["media"] = "all";
+    }
+
+    if ( wp_style_is( $handle, "registered" ) ) {
+      wp_deregister_style( $handle );
+    }
+
+    add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
+      wp_enqueue_style( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["media"] );
+    }, 50 );
+  }
+
+  /**
+   * Register and enqueue script
+   *
+   * @param {String} $handle
+   * @param {Array}  $opts
+   *
+   * @return {Void}
+   */
+  private function register_script( $handle, $opts ) {
+    if ( ! isset( $opts["in_footer"] ) ) {
+      $opts["in_footer"] = false;
+    }
+
+    if ( wp_script_is( $handle, "registered" ) ) {
+      wp_deregister_script( $handle );
+    }
+
+    add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
+      wp_enqueue_script( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["in_footer"] );
+    }, 50 );
   }
 
   /**

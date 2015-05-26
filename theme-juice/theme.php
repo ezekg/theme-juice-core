@@ -18,8 +18,8 @@ class Theme {
    * @var {Array}
    */
   private $defaults = array(
-    "assets" => array(),
     "packages" => array(),
+    "assets" => array(),
   );
 
   /**
@@ -28,13 +28,13 @@ class Theme {
    * @param {Array} $options
    */
   public function __construct( $options = array() ) {
-    $options = array_merge( self::$defaults, $options );
+    $options = array_merge( $this->defaults, $options );
 
-    $this->assets = $options["assets"];
     $this->packages = $options["packages"];
+    $this->assets = $options["assets"];
 
-    new Loaders\AssetLoader( self::$assets );
-    new Loaders\PackageLoader( self::$packages );
+    Loaders\PackageLoader::load_packages( $this->packages );
+    Loaders\AssetLoader::load_assets( $this->assets );
   }
 
   /**
@@ -43,11 +43,14 @@ class Theme {
    * @return {Void}
    */
   public function render_head() {
-    do_action( "tj_before_render_head" );
-
     $buffer = array();
+
+    do_action( "tj_before_render_doctype", &$buffer );
     $buffer[] = "<!doctype html>";
+    do_action( "tj_after_render_doctype", &$buffer );
+    do_action( "tj_before_render_html", &$buffer );
     $buffer[] = "<html class='no-js'>";
+    do_action( "tj_before_render_head", &$buffer );
     $buffer[] = "<head>";
     $buffer[] = "<meta charset='" . get_bloginfo( "charset" ) . "'>";
     $buffer[] = "<meta http-equiv='x-ua-compatible' content='ie=edge' />";
@@ -59,10 +62,12 @@ class Theme {
 
     $buffer = array();
     $buffer[] = "</head>";
+    do_action( "tj_after_render_head", &$buffer );
+
+    do_action( "tj_before_render_body", &$buffer );
     $buffer[] = "<body class='" . implode( " ", get_body_class() ) . "'>";
     echo implode( "", $buffer );
 
-    do_action( "tj_after_render_head" );
   }
 
   /**
@@ -71,15 +76,14 @@ class Theme {
    * @return {Void}
    */
   public function render_footer() {
-    do_action( "tj_before_render_footer" );
-
+    $buffer = array();
+    
     wp_footer();
 
-    $buffer = array();
     $buffer[] = "</body>";
+    do_action( "tj_after_render_body", &$buffer );
     $buffer[] = "</html>";
+    do_action( "tj_after_render_html", &$buffer );
     echo implode( "", $buffer );
-
-    do_action( "tj_after_render_footer" );
   }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace ThemeJuice\Loaders;
+use \ThemeJuice\Theme as Theme;
 
 class AssetLoader {
 
@@ -16,10 +17,12 @@ class AssetLoader {
     // @TODO Fix for PHP <= 5.3.x not allowing $this inside of closures
     $self = $this;
 
-    if ( ! $this->on_admin_pages() && ! empty( $assets ) ) {
+    if ( ! self::on_admin_pages() && ! empty( $assets ) ) {
+      Theme::assets = $assets;
+
       add_action( "init", function() use ( &$self ) {
         foreach ( $assets as $handle => $opts ) {
-          $self->register_asset( $handle, $opts );
+          self::register_asset( $handle, $opts );
         }
       });
     }
@@ -40,7 +43,7 @@ class AssetLoader {
    *
    * @return {Void}
    */
-  private function register_asset( $handle, $opts ) {
+  private static function register_asset( $handle, $opts ) {
 
     if ( ! isset( $opts["type"] ) ) {
       throw new \Exception( "Attempted to register asset '{$handle}' without a type. Aborting mission." );
@@ -64,10 +67,10 @@ class AssetLoader {
 
     switch ( $opts["type"] ) {
       case "style":
-        $this->register_style( $handle, $opts );
+        self::register_style( $handle, $opts );
         break;
       case "script":
-        $this->register_script( $handle, $opts );
+        self::register_script( $handle, $opts );
         break;
       default:
         throw new \Exception( "Invalid asset type '{$opts['type']}' for '{$handle}'. Aborting mission." );
@@ -83,7 +86,7 @@ class AssetLoader {
    *
    * @return {Void}
    */
-  private function register_style( $handle, $opts ) {
+  private static function register_style( $handle, $opts ) {
     if ( ! isset( $opts["media"] ) ) {
       $opts["media"] = "all";
     }
@@ -105,7 +108,7 @@ class AssetLoader {
    *
    * @return {Void}
    */
-  private function register_script( $handle, $opts ) {
+  private static function register_script( $handle, $opts ) {
     if ( ! isset( $opts["in_footer"] ) ) {
       $opts["in_footer"] = false;
     }
@@ -122,7 +125,7 @@ class AssetLoader {
   /**
    * @return {Bool}
    */
-  private function on_admin_pages() {
+  private static function on_admin_pages() {
     return ( is_admin() || $GLOBALS["pagenow"] === "wp-login.php" );
   }
 }

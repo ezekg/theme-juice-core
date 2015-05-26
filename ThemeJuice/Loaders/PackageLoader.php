@@ -12,8 +12,8 @@ class PackageLoader {
    * @return {Void}
    */
   public static function load_packages( $packages ) {
-    if ( $this->packages !== false ) {
-      $this->setup_packages( array_filter( $this->packages, function( $package ) {
+    if ( $packages !== false ) {
+      self::setup_packages( array_filter( $packages, function( $package ) {
         return $package !== false;
       }));
     }
@@ -26,7 +26,7 @@ class PackageLoader {
    *
    * @return {Void}
    */
-  private function setup_packages( $packages ) {
+  private static function setup_packages( $packages ) {
     foreach ( array_keys( $packages ) as $package ) {
       Factories\PackageFactory::setup_package( $package );
     }

@@ -7,12 +7,12 @@ class Theme {
   /**
    * @var {Array}
    */
-  private $assets;
+  public static $assets;
 
   /**
    * @var {Array}
    */
-  private $packages;
+  public static $packages;
 
   /**
    * @var {Array}
@@ -30,11 +30,11 @@ class Theme {
   public function __construct( $options = array() ) {
     $options = array_merge( $this->defaults, $options );
 
-    $this->packages = $options["packages"];
-    $this->assets = $options["assets"];
+    self::$packages = $options["packages"];
+    self::$assets = $options["assets"];
 
-    Loaders\PackageLoader::load_packages( $this->packages );
-    Loaders\AssetLoader::load_assets( $this->assets );
+    Loaders\PackageLoader::load_packages( self::$packages );
+    Loaders\AssetLoader::load_assets( self::$assets );
   }
 
   /**

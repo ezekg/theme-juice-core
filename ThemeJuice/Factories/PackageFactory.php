@@ -1,6 +1,7 @@
 <?php
 
 namespace ThemeJuice\Factories;
+use \ThemeJuice\Theme as Theme;
 
 class PackageFactory {
 
@@ -15,7 +16,7 @@ class PackageFactory {
     $class_name = self::format_package_to_class_name( $package );
 
     if ( class_exists( $package_class = "\\ThemeJuice\\Packages\\$class_name" ) ) {
-      $this->{$package} = new $package_class( function() use ( $packages, $package ) {
+      Theme::packages[$package] = new $package_class( function() use ( $packages, $package ) {
         if ( ! empty( $packages[$package] ) ) {
           return $packages[$package];
         } else {
@@ -32,7 +33,7 @@ class PackageFactory {
    *
    * @return {String}
    */
-  private function format_package_to_class_name( $package ) {
+  private static function format_package_to_class_name( $package ) {
     return implode( "", array_map( "ucfirst", preg_split( "/[_-]+/", $package )));
   }
 }

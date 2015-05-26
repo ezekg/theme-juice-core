@@ -45,12 +45,12 @@ class Theme {
   public function render_head() {
     $buffer = array();
 
-    do_action( "tj_before_render_doctype" );
+    $buffer = apply_filters( "tj_before_render_doctype", $buffer );
     $buffer[] = "<!doctype html>";
-    do_action( "tj_after_render_doctype" );
-    do_action( "tj_before_render_html" );
+    $buffer = apply_filters( "tj_after_render_doctype", $buffer );
+    $buffer = apply_filters( "tj_before_render_html", $buffer );
     $buffer[] = "<html class='no-js'>";
-    do_action( "tj_before_render_head" );
+    $buffer = apply_filters( "tj_before_render_head", $buffer );
     $buffer[] = "<head>";
     $buffer[] = "<meta charset='" . get_bloginfo( "charset" ) . "'>";
     $buffer[] = "<meta http-equiv='x-ua-compatible' content='ie=edge' />";
@@ -62,8 +62,8 @@ class Theme {
 
     $buffer = array();
     $buffer[] = "</head>";
-    do_action( "tj_after_render_head" );
-    do_action( "tj_before_render_body" );
+    $buffer = apply_filters( "tj_after_render_head", $buffer );
+    $buffer = apply_filters( "tj_before_render_body", $buffer );
     $buffer[] = "<body class='" . implode( " ", get_body_class() ) . "'>";
     echo implode( "", $buffer );
   }
@@ -78,9 +78,9 @@ class Theme {
 
     $buffer = array();
     $buffer[] = "</body>";
-    do_action( "tj_after_render_body" );
+    $buffer = apply_filters( "tj_after_render_body", $buffer );
     $buffer[] = "</html>";
-    do_action( "tj_after_render_html" );
+    $buffer = apply_filters( "tj_after_render_html", $buffer );
     echo implode( "", $buffer );
   }
 }

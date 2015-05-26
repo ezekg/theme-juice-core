@@ -16,7 +16,7 @@ class PackageFactory {
     $class_name = self::format_package_to_class_name( $package );
 
     if ( class_exists( $package_class = "\\ThemeJuice\\Packages\\$class_name" ) ) {
-      Theme::packages[$package] = new $package_class( function() use ( $packages, $package ) {
+      new $package_class( function() use ( $packages, $package ) {
         if ( ! empty( $packages[$package] ) ) {
           return $packages[$package];
         } else {

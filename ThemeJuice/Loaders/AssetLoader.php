@@ -18,8 +18,6 @@ class AssetLoader {
     $self = $this;
 
     if ( ! self::on_admin_pages() && ! empty( $assets ) ) {
-      Theme::assets = $assets;
-
       add_action( "init", function() use ( &$self ) {
         foreach ( $assets as $handle => $opts ) {
           self::register_asset( $handle, $opts );

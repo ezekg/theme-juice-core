@@ -1,7 +1,6 @@
 <?php
 
 namespace ThemeJuice\Factories;
-use \ThemeJuice\Theme as Theme;
 
 class PackageFactory {
 

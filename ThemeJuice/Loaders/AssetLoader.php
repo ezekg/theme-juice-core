@@ -1,7 +1,6 @@
 <?php
 
 namespace ThemeJuice\Loaders;
-use \ThemeJuice\Theme as Theme;
 
 class AssetLoader implements LoaderInterface {
 

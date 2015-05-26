@@ -1,7 +1,8 @@
 <?php
 
 namespace ThemeJuice\Loaders;
-use \ThemeJuice\Factories\PackageFactory as PackageFactory;
+
+use \ThemeJuice\Factories\PackageFactory;
 
 class PackageLoader implements LoaderInterface {
 

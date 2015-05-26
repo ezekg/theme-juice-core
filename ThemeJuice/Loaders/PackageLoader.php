@@ -2,7 +2,7 @@
 
 namespace ThemeJuice\Loaders;
 
-class PackageLoader {
+class PackageLoader implements LoaderInterface {
 
   /**
    * Filter out disabled packages, then load passed packages
@@ -11,7 +11,7 @@ class PackageLoader {
    *
    * @return {Void}
    */
-  public static function load_packages( $packages ) {
+  public static function load( $packages ) {
     if ( $packages !== false ) {
       self::setup_packages( array_filter( $packages, function( $package ) {
         return $package !== false;

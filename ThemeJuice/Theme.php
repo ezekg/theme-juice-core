@@ -33,8 +33,8 @@ class Theme {
     $this->packages = $options["packages"];
     $this->assets = $options["assets"];
 
-    Loaders\PackageLoader::load_packages( $this->packages );
-    Loaders\AssetLoader::load_assets( $this->assets );
+    Loaders\PackageLoader::load( $this->packages );
+    Loaders\AssetLoader::load( $this->assets );
   }
 
   /**

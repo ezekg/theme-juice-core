@@ -3,7 +3,7 @@
 namespace ThemeJuice\Loaders;
 use \ThemeJuice\Theme as Theme;
 
-class AssetLoader {
+class AssetLoader implements LoaderInterface {
 
   /**
    * Add each assets registration method to init action
@@ -12,7 +12,7 @@ class AssetLoader {
    *
    * @return {Void}
    */
-  public static function load_assets( $assets ) {
+  public static function load( $assets ) {
 
     // @TODO Fix for PHP <= 5.3.x not allowing self/$this inside of closures
     $self = __CLASS__;

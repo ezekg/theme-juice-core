@@ -2,6 +2,9 @@
 
 namespace ThemeJuice;
 
+use Loaders\AssetLoader;
+use Loaders\PackageLoader;
+
 class Theme {
 
   /**
@@ -18,8 +21,8 @@ class Theme {
    * @var {Array}
    */
   private $defaults = array(
-    "packages" => array(),
     "assets" => array(),
+    "packages" => array(),
   );
 
   /**
@@ -30,11 +33,11 @@ class Theme {
   public function __construct( $options = array() ) {
     $options = array_merge( $this->defaults, $options );
 
-    $this->packages = $options["packages"];
     $this->assets = $options["assets"];
-
-    Loaders\PackageLoader::load( $this->packages );
-    Loaders\AssetLoader::load( $this->assets );
+    $this->packages = $options["packages"];
+    
+    AssetLoader::load( $this->assets );
+    PackageLoader::load( $this->packages );
   }
 
   /**

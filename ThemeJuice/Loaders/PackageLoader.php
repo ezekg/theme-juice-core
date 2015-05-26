@@ -29,7 +29,7 @@ class PackageLoader implements LoaderInterface {
    */
   private static function setup_packages( $packages ) {
     foreach ( array_keys( $packages ) as $package ) {
-      PackageFactory::setup_package( $package );
+      PackageFactory::setup_package( $package, $packages[$package] );
     }
   }
 }

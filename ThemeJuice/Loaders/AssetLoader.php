@@ -18,7 +18,7 @@ class AssetLoader {
     $self = __CLASS__;
 
     if ( ! self::on_admin_pages() && ! empty( $assets ) ) {
-      add_action( "init", function() use ( &$self ) {
+      add_action( "init", function() use ( &$self, $assets ) {
         foreach ( $assets as $handle => $opts ) {
           $self::register_asset( $handle, $opts );
         }

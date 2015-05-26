@@ -8,15 +8,15 @@ class PackageFactory {
    * Initialize passed package
    *
    * @param {String} $package
-   * @param {Array}  $opts
+   * @param {Array}  $options
    *
    * @return {Void}
    */
-  public static function setup_package( $package, $opts ) {
+  public static function setup_package( $package, $options ) {
     $class_name = self::format_package_to_class_name( $package );
 
     if ( class_exists( $package_class = "\\ThemeJuice\\Packages\\$class_name" ) ) {
-      new $package_class( $opts );
+      new $package_class( $options );
     }
   }
 

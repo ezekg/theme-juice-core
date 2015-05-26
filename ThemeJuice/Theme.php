@@ -63,11 +63,9 @@ class Theme {
     $buffer = array();
     $buffer[] = "</head>";
     do_action( "tj_after_render_head" );
-
     do_action( "tj_before_render_body" );
     $buffer[] = "<body class='" . implode( " ", get_body_class() ) . "'>";
     echo implode( "", $buffer );
-
   }
 
   /**
@@ -76,10 +74,9 @@ class Theme {
    * @return {Void}
    */
   public function render_footer() {
-    $buffer = array();
-
     wp_footer();
 
+    $buffer = array();
     $buffer[] = "</body>";
     do_action( "tj_after_render_body" );
     $buffer[] = "</html>";

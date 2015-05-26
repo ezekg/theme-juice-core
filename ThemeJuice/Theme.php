@@ -44,7 +44,6 @@ class Theme {
    */
   public function render_head() {
     $buffer = array();
-
     $buffer = apply_filters( "tj_before_render_doctype", $buffer );
     $buffer[] = "<!doctype html>";
     $buffer = apply_filters( "tj_after_render_doctype", $buffer );

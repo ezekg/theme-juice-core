@@ -45,12 +45,12 @@ class Theme {
   public function render_head() {
     $buffer = array();
 
-    do_action( "tj_before_render_doctype", &$buffer );
+    do_action( "tj_before_render_doctype", $buffer );
     $buffer[] = "<!doctype html>";
-    do_action( "tj_after_render_doctype", &$buffer );
-    do_action( "tj_before_render_html", &$buffer );
+    do_action( "tj_after_render_doctype", $buffer );
+    do_action( "tj_before_render_html", $buffer );
     $buffer[] = "<html class='no-js'>";
-    do_action( "tj_before_render_head", &$buffer );
+    do_action( "tj_before_render_head", $buffer );
     $buffer[] = "<head>";
     $buffer[] = "<meta charset='" . get_bloginfo( "charset" ) . "'>";
     $buffer[] = "<meta http-equiv='x-ua-compatible' content='ie=edge' />";
@@ -62,9 +62,9 @@ class Theme {
 
     $buffer = array();
     $buffer[] = "</head>";
-    do_action( "tj_after_render_head", &$buffer );
+    do_action( "tj_after_render_head", $buffer );
 
-    do_action( "tj_before_render_body", &$buffer );
+    do_action( "tj_before_render_body", $buffer );
     $buffer[] = "<body class='" . implode( " ", get_body_class() ) . "'>";
     echo implode( "", $buffer );
 
@@ -77,13 +77,13 @@ class Theme {
    */
   public function render_footer() {
     $buffer = array();
-    
+
     wp_footer();
 
     $buffer[] = "</body>";
-    do_action( "tj_after_render_body", &$buffer );
+    do_action( "tj_after_render_body", $buffer );
     $buffer[] = "</html>";
-    do_action( "tj_after_render_html", &$buffer );
+    do_action( "tj_after_render_html", $buffer );
     echo implode( "", $buffer );
   }
 }

@@ -27,7 +27,7 @@ class PackageLoader {
    * @return {Void}
    */
   private function setup_packages( $packages ) {
-    foreach ( array_keys( $packages ) as $package )
+    foreach ( array_keys( $packages ) as $package ) {
       Factories\PackageFactory::setup_package( $package );
     }
   }

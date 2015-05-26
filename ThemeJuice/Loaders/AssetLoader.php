@@ -15,12 +15,12 @@ class AssetLoader {
   public static function load_assets( $assets ) {
 
     // @TODO Fix for PHP <= 5.3.x not allowing $this inside of closures
-    $self = $this;
+    $self = __CLASS__;
 
     if ( ! self::on_admin_pages() && ! empty( $assets ) ) {
       add_action( "init", function() use ( &$self ) {
         foreach ( $assets as $handle => $opts ) {
-          self::register_asset( $handle, $opts );
+          $self::register_asset( $handle, $opts );
         }
       });
     }

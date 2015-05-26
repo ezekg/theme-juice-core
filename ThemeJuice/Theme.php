@@ -7,12 +7,12 @@ class Theme {
   /**
    * @var {Array}
    */
-  public $assets = array();
+  public $assets;
 
   /**
    * @var {Array}
    */
-  public $packages = array();
+  public $packages;
 
   /**
    * @var {Array}

@@ -2,8 +2,8 @@
 
 namespace ThemeJuice;
 
-use Loaders\AssetLoader;
-use Loaders\PackageLoader;
+use \ThemeJuice\Loaders\AssetLoader;
+use \ThemeJuice\Loaders\PackageLoader;
 
 class Theme {
 
@@ -35,7 +35,7 @@ class Theme {
 
     $this->assets = $options["assets"];
     $this->packages = $options["packages"];
-    
+
     AssetLoader::load( $this->assets );
     PackageLoader::load( $this->packages );
   }

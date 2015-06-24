@@ -40,7 +40,7 @@ class AssetLoader implements LoaderInterface {
    *
    * @return {Void}
    */
-  private static function register_asset( $handle, $opts ) {
+  public static function register_asset( $handle, $opts ) {
 
     if ( ! isset( $opts["type"] ) ) {
       throw new \Exception( "Attempted to register asset '{$handle}' without a type. Aborting mission." );

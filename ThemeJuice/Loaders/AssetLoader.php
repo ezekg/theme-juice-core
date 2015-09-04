@@ -12,16 +12,10 @@ class AssetLoader implements LoaderInterface {
    * @return {Void}
    */
   public static function load( $assets ) {
-
-    // @TODO Fix for PHP <= 5.3.x not allowing self/$this inside of closures
-    $self = __CLASS__;
-
     if ( ! self::on_admin_pages() && ! empty( $assets ) ) {
-      add_action( "init", function() use ( &$self, $assets ) {
-        foreach ( $assets as $handle => $opts ) {
-          $self::register_asset( $handle, $opts );
-        }
-      });
+      foreach ( $assets as $handle => $opts ) {
+        self::register_asset( $handle, $opts );
+      }
     }
   }
 
@@ -88,11 +82,11 @@ class AssetLoader implements LoaderInterface {
       $opts["media"] = "all";
     }
 
-    if ( wp_style_is( $handle, "registered" ) ) {
-      wp_deregister_style( $handle );
-    }
-
     add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
+      if ( wp_style_is( $handle, "registered" ) ) {
+        wp_deregister_style( $handle );
+      }
+
       wp_enqueue_style( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["media"] );
     }, 50 );
   }
@@ -110,11 +104,11 @@ class AssetLoader implements LoaderInterface {
       $opts["in_footer"] = false;
     }
 
-    if ( wp_script_is( $handle, "registered" ) ) {
-      wp_deregister_script( $handle );
-    }
-
     add_action( "wp_enqueue_scripts", function() use ( $handle, $opts ) {
+      if ( wp_script_is( $handle, "registered" ) ) {
+        wp_deregister_script( $handle );
+      }
+
       wp_enqueue_script( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["in_footer"] );
     }, 50 );
   }

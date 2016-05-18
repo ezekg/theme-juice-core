@@ -31,6 +31,7 @@ class AssetLoader implements LoaderInterface {
    * @param {String} $opts["version"]      - Version number for asset
    * @param {String} $opts["media"]        - Media rule for stylesheets
    * @param {Bool}   $opts["in_footer"]    - Output script to footer
+   * @param {Int}    $opts["priority"]     - Priority of script
    *
    * @return {Void}
    */
@@ -54,6 +55,10 @@ class AssetLoader implements LoaderInterface {
 
     if ( ! isset( $opts["version"] ) ) {
       $opts["version"] = false;
+    }
+
+    if ( ! isset( $opts["priority"] ) ) {
+      $opts["priority"] = 50;
     }
 
     switch ( $opts["type"] ) {
@@ -88,7 +93,7 @@ class AssetLoader implements LoaderInterface {
       }
 
       wp_enqueue_style( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["media"] );
-    }, 50 );
+    }, $opts["priority"] );
   }
 
   /**
@@ -110,7 +115,7 @@ class AssetLoader implements LoaderInterface {
       }
 
       wp_enqueue_script( $handle, $opts["location"], $opts["dependencies"], $opts["version"], $opts["in_footer"] );
-    }, 50 );
+    }, $opts["priority"] );
   }
 
   /**
